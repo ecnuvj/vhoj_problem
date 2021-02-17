@@ -1,0 +1,103 @@
+syntax = "proto3";
+
+option go_package = "github.com/ecnuvj/vhoj_problem/pkg/sdk/problempb";
+
+package sdk;
+
+import "base/base.proto";
+import "problempb/problem.proto";
+import "problempb/contest.proto";
+import "include/google/protobuf/timestamp.proto";
+
+service ProblemService {
+    rpc ListProblems(ListProblemsRequest) returns(ListProblemsResponse) {};
+    rpc GetProblemById(GetProblemByIdRequest) returns(GetProblemByIdResponse) {};
+    rpc SearchProblemByCondition(SearchProblemByConditionRequest) returns(SearchProblemByConditionResponse) {};
+    rpc CreateContest(CreateContestRequest) returns(CreateContestResponse) {};
+    rpc ListContests(ListContestsRequest) returns(ListContestsResponse) {};
+    rpc GetContestById(GetContestByIdRequest) returns(GetContestByIdResponse) {};
+    rpc AddContestParticipant(AddContestParticipantRequest) returns(AddContestParticipantResponse) {};
+    rpc GenerateContestParticipants(GenerateContestParticipantsRequest) returns(GenerateContestParticipantsResponse) {};
+    rpc AddContestAdmin(AddContestAdminRequest) returns(AddContestAdminResponse) {};
+    rpc GetContestAdmins(GetContestAdminsRequest) returns(GetContestAdminsResponse) {};
+}
+
+message ListProblemsRequest {
+    int32 page_no = 1;
+    int32 page_size = 2;
+}
+
+message ListProblemsResponse {
+    repeated Problem problems = 1;
+    int32 total_pages = 2;
+    int32 total_count = 3;
+    base.BaseResponse base_response = 4;
+}
+
+message GetProblemByIdRequest {
+    uint64 problem_id = 1;
+}
+
+message GetProblemByIdResponse {
+    Problem problem = 1;
+    base.BaseResponse base_response = 2;
+}
+
+message SearchProblemByConditionRequest {
+    string title = 1;
+    uint64 problem_id = 2;
+    int32 source_oj = 3;
+    int32 page_no = 4;
+    int32 page_size = 5;
+}
+
+message SearchProblemByConditionResponse {
+    repeated Problem problems = 1;
+    int32 total_pages = 2;
+    int32 total_count = 3;
+    base.BaseResponse base_response = 4;
+}
+
+message CreateContestRequest {
+    Contest contest = 1;
+    string title = 2;
+}
+
+message CreateContestResponse {
+    uint64 contest_id = 1;
+    base.BaseResponse base_response = 2;
+}
+
+message ListContestsRequest {
+    int32 page_no = 1;
+    int32 page_size = 2;
+}
+
+message ListContestsResponse {
+    repeated Contest contests = 1;
+    int32 total_page = 2;
+    int32 total_count = 3;
+    base.BaseResponse base_response = 4;
+}
+
+message GetContestByIdRequest {
+    uint64 contest_id = 1;
+}
+
+message GetContestByIdResponse {
+    Contest contest = 1;
+    base.BaseResponse base_response = 2;
+}
+
+message AddContestParticipantRequest {
+    uint64 contest_id = 1;
+    uint64 user_id = 2;
+}
+
+message AddContestParticipantResponse {
+    base.BaseResponse base_response = 1;
+}
+
+message GenerateContestParticipantsRequest {
+
+}
