@@ -5,9 +5,9 @@ option go_package = "github.com/ecnuvj/vhoj_problem/pkg/sdk/problempb";
 package sdk;
 
 import "base/base.proto";
-import "problempb/problem.proto";
 import "problempb/contest.proto";
-import "include/google/protobuf/timestamp.proto";
+import "problempb/problem.proto";
+import "problempb/user.proto";
 
 service ProblemService {
     rpc ListProblems(ListProblemsRequest) returns(ListProblemsResponse) {};
@@ -20,6 +20,7 @@ service ProblemService {
     rpc GenerateContestParticipants(GenerateContestParticipantsRequest) returns(GenerateContestParticipantsResponse) {};
     rpc AddContestAdmin(AddContestAdminRequest) returns(AddContestAdminResponse) {};
     rpc GetContestAdmins(GetContestAdminsRequest) returns(GetContestAdminsResponse) {};
+    rpc GetContestParticipants(GetContestParticipantsRequest) returns(GetContestParticipantsResponse) {};
 }
 
 message ListProblemsRequest {
@@ -99,5 +100,38 @@ message AddContestParticipantResponse {
 }
 
 message GenerateContestParticipantsRequest {
+    uint64 contest_id = 1;
+    int32 generate_count = 2;
+}
 
+message GenerateContestParticipantsResponse {
+    repeated User users = 1;
+    base.BaseResponse base_response = 2;
+}
+
+message AddContestAdminRequest {
+    uint64 contest_id = 1;
+    User user = 2;
+}
+
+message AddContestAdminResponse {
+    base.BaseResponse base_response = 1;
+}
+
+message GetContestAdminsRequest {
+    uint64 contest_id = 1;
+}
+
+message GetContestAdminsResponse {
+    repeated User users = 1;
+    base.BaseResponse base_response = 2;
+}
+
+message GetContestParticipantsRequest {
+    uint64 contest_id = 1;
+}
+
+message GetContestParticipantsResponse {
+    repeated User users = 1;
+    base.BaseResponse base_response = 2;
 }
