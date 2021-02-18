@@ -20,28 +20,21 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="a4245553-491c-4dae-8aac-a6f0e10a7408" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/compile.bat" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/config/mysql.yaml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/go.mod" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/go.sum" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/pkg/bootstrap/database/init.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/pkg/bootstrap/init.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/pkg/bootstrap/rpc_client/init.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/pkg/bootstrap/rpc_service/init.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/pkg/handler/handler.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/pkg/sdk/base/base.pb.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/pkg/sdk/problempb/contest.pb.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/pkg/sdk/problempb/problem.pb.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/pkg/sdk/problempb/service.pb.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/pkg/sdk/problempb/service_grpc.pb.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/pkg/sdk/problempb/user.pb.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/pkg/sdk/problempb/user.proto" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/pkg/service/service.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/pkg/adapter/adapter.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/pkg/common/condition.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/pkg/common/page.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/pkg/handler/handler_test.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/pkg/util/reply.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pkg/sdk/base/base.proto" beforeDir="false" afterPath="$PROJECT_DIR$/pkg/sdk/base/base.proto" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pkg/bootstrap/database/init.go" beforeDir="false" afterPath="$PROJECT_DIR$/pkg/bootstrap/database/init.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pkg/handler/handler.go" beforeDir="false" afterPath="$PROJECT_DIR$/pkg/handler/handler.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pkg/sdk/problempb/contest.pb.go" beforeDir="false" afterPath="$PROJECT_DIR$/pkg/sdk/problempb/contest.pb.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/pkg/sdk/problempb/contest.proto" beforeDir="false" afterPath="$PROJECT_DIR$/pkg/sdk/problempb/contest.proto" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pkg/sdk/problempb/problem.pb.go" beforeDir="false" afterPath="$PROJECT_DIR$/pkg/sdk/problempb/problem.pb.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/pkg/sdk/problempb/problem.proto" beforeDir="false" afterPath="$PROJECT_DIR$/pkg/sdk/problempb/problem.proto" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pkg/sdk/problempb/service.pb.go" beforeDir="false" afterPath="$PROJECT_DIR$/pkg/sdk/problempb/service.pb.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/pkg/sdk/problempb/service.proto" beforeDir="false" afterPath="$PROJECT_DIR$/pkg/sdk/problempb/service.proto" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pkg/service/service.go" beforeDir="false" afterPath="$PROJECT_DIR$/pkg/service/service.go" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -75,7 +68,6 @@
     <property name="ASKED_SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="DefaultGoTemplateProperty" value="Go File" />
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
-    <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="configurable.Global.GOPATH.is.expanded" value="true" />
     <property name="configurable.Project.GOPATH.is.expanded" value="true" />
@@ -89,7 +81,7 @@
     <property name="node.js.path.for.package.tslint" value="project" />
     <property name="node.js.selected.package.eslint" value="(autodetect)" />
     <property name="node.js.selected.package.tslint" value="(autodetect)" />
-    <property name="settings.editor.selected.configurable" value="go.vgo" />
+    <property name="settings.editor.selected.configurable" value="watcher.settings" />
   </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
@@ -97,6 +89,24 @@
       <recent name="D:\Users\14861\go\src\github.com\vhoj_problem\pkg\sdk" />
       <recent name="D:\Users\14861\go\src\github.com\vhoj_problem\pkg\sdk\base" />
     </key>
+  </component>
+  <component name="RunManager">
+    <configuration name="TestProblemHandler_ListProblems in github.com/ecnuvj/vhoj_problem/pkg/handler" type="GoTestRunConfiguration" factoryName="Go Test" temporary="true" nameIsGenerated="true">
+      <module name="vhoj_problem" />
+      <working_directory value="$PROJECT_DIR$/pkg/handler" />
+      <framework value="gotest" />
+      <kind value="PACKAGE" />
+      <package value="github.com/ecnuvj/vhoj_problem/pkg/handler" />
+      <directory value="$PROJECT_DIR$" />
+      <filePath value="$PROJECT_DIR$" />
+      <pattern value="^\QTestProblemHandler_ListProblems\E$" />
+      <method v="2" />
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Go Test.TestProblemHandler_ListProblems in github.com/ecnuvj/vhoj_problem/pkg/handler" />
+      </list>
+    </recent_temporary>
   </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TypeScriptGeneratedFilesManager">
@@ -128,5 +138,33 @@
       <screen x="0" y="0" width="1536" height="864" />
     </state>
     <state x="561" y="266" key="#Go_Modules/0.0.1536.864@0.0.1536.864" timestamp="1613585080543" />
+    <state x="544" y="138" key="#com.intellij.ide.util.MemberChooser" timestamp="1613656524789">
+      <screen x="0" y="0" width="1536" height="864" />
+    </state>
+    <state x="544" y="138" key="#com.intellij.ide.util.MemberChooser/0.0.1536.864@0.0.1536.864" timestamp="1613656524789" />
+    <state x="425" y="209" key="EditFileWatcherDialog" timestamp="1613638706887">
+      <screen x="0" y="0" width="1536" height="864" />
+    </state>
+    <state x="425" y="209" key="EditFileWatcherDialog/0.0.1536.864@0.0.1536.864" timestamp="1613638706887" />
+    <state width="1493" height="223" key="GridCell.Tab.0.bottom" timestamp="1613657020363">
+      <screen x="0" y="0" width="1536" height="864" />
+    </state>
+    <state width="1493" height="223" key="GridCell.Tab.0.bottom/0.0.1536.864@0.0.1536.864" timestamp="1613657020363" />
+    <state width="1493" height="223" key="GridCell.Tab.0.center" timestamp="1613657020363">
+      <screen x="0" y="0" width="1536" height="864" />
+    </state>
+    <state width="1493" height="223" key="GridCell.Tab.0.center/0.0.1536.864@0.0.1536.864" timestamp="1613657020363" />
+    <state width="1493" height="223" key="GridCell.Tab.0.left" timestamp="1613657020363">
+      <screen x="0" y="0" width="1536" height="864" />
+    </state>
+    <state width="1493" height="223" key="GridCell.Tab.0.left/0.0.1536.864@0.0.1536.864" timestamp="1613657020363" />
+    <state width="1493" height="223" key="GridCell.Tab.0.right" timestamp="1613657020363">
+      <screen x="0" y="0" width="1536" height="864" />
+    </state>
+    <state width="1493" height="223" key="GridCell.Tab.0.right/0.0.1536.864@0.0.1536.864" timestamp="1613657020363" />
+    <state x="270" y="77" key="SettingsEditor" timestamp="1613638709898">
+      <screen x="0" y="0" width="1536" height="864" />
+    </state>
+    <state x="270" y="77" key="SettingsEditor/0.0.1536.864@0.0.1536.864" timestamp="1613638709898" />
   </component>
 </project>

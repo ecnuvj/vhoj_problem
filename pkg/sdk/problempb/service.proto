@@ -61,7 +61,6 @@ message SearchProblemByConditionResponse {
 
 message CreateContestRequest {
     Contest contest = 1;
-    string title = 2;
 }
 
 message CreateContestResponse {

@@ -12,8 +12,8 @@ message Problem {
     string sample_output = 5;
     string input = 6;
     string output = 7;
-    uint32 time_limit = 8;
-    uint32 memory_limit = 9;
-    uint32 submitted = 10;
-    uint32 accepted = 11;
+    string time_limit = 8;
+    string memory_limit = 9;
+    int64 submitted = 10;
+    int64 accepted = 11;
 }
