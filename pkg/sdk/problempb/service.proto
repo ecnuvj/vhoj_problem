@@ -110,7 +110,7 @@ message GenerateContestParticipantsResponse {
 
 message AddContestAdminRequest {
     uint64 contest_id = 1;
-    User user = 2;
+    uint64 user_id = 2;
 }
 
 message AddContestAdminResponse {

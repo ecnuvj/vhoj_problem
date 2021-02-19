@@ -20,18 +20,16 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="a4245553-491c-4dae-8aac-a6f0e10a7408" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/pkg/adapter/adapter.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/pkg/common/condition.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/pkg/common/page.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/pkg/handler/handler_test.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/pkg/util/reply.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/main.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/pkg/service/service_test.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pkg/bootstrap/database/init.go" beforeDir="false" afterPath="$PROJECT_DIR$/pkg/bootstrap/database/init.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/go.mod" beforeDir="false" afterPath="$PROJECT_DIR$/go.mod" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/go.sum" beforeDir="false" afterPath="$PROJECT_DIR$/go.sum" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pkg/bootstrap/init.go" beforeDir="false" afterPath="$PROJECT_DIR$/pkg/bootstrap/init.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pkg/bootstrap/rpc_service/init.go" beforeDir="false" afterPath="$PROJECT_DIR$/pkg/bootstrap/rpc_service/init.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/pkg/handler/handler.go" beforeDir="false" afterPath="$PROJECT_DIR$/pkg/handler/handler.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/pkg/sdk/problempb/contest.pb.go" beforeDir="false" afterPath="$PROJECT_DIR$/pkg/sdk/problempb/contest.pb.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/pkg/sdk/problempb/contest.proto" beforeDir="false" afterPath="$PROJECT_DIR$/pkg/sdk/problempb/contest.proto" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pkg/sdk/problempb/problem.pb.go" beforeDir="false" afterPath="$PROJECT_DIR$/pkg/sdk/problempb/problem.pb.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pkg/sdk/problempb/problem.proto" beforeDir="false" afterPath="$PROJECT_DIR$/pkg/sdk/problempb/problem.proto" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/pkg/sdk/problempb/service.pb.go" beforeDir="false" afterPath="$PROJECT_DIR$/pkg/sdk/problempb/service.pb.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/pkg/sdk/problempb/service.proto" beforeDir="false" afterPath="$PROJECT_DIR$/pkg/sdk/problempb/service.proto" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/pkg/service/service.go" beforeDir="false" afterPath="$PROJECT_DIR$/pkg/service/service.go" afterDir="false" />
@@ -90,7 +88,7 @@
       <recent name="D:\Users\14861\go\src\github.com\vhoj_problem\pkg\sdk\base" />
     </key>
   </component>
-  <component name="RunManager">
+  <component name="RunManager" selected="Go Test.TestProblemService_GetContest in github.com/ecnuvj/vhoj_problem/pkg/service">
     <configuration name="TestProblemHandler_ListProblems in github.com/ecnuvj/vhoj_problem/pkg/handler" type="GoTestRunConfiguration" factoryName="Go Test" temporary="true" nameIsGenerated="true">
       <module name="vhoj_problem" />
       <working_directory value="$PROJECT_DIR$/pkg/handler" />
@@ -102,8 +100,20 @@
       <pattern value="^\QTestProblemHandler_ListProblems\E$" />
       <method v="2" />
     </configuration>
+    <configuration name="TestProblemService_GetContest in github.com/ecnuvj/vhoj_problem/pkg/service" type="GoTestRunConfiguration" factoryName="Go Test" temporary="true" nameIsGenerated="true">
+      <module name="vhoj_problem" />
+      <working_directory value="$PROJECT_DIR$/pkg/service" />
+      <framework value="gotest" />
+      <kind value="PACKAGE" />
+      <package value="github.com/ecnuvj/vhoj_problem/pkg/service" />
+      <directory value="$PROJECT_DIR$" />
+      <filePath value="$PROJECT_DIR$" />
+      <pattern value="^\QTestProblemService_GetContest\E$" />
+      <method v="2" />
+    </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="Go Test.TestProblemService_GetContest in github.com/ecnuvj/vhoj_problem/pkg/service" />
         <item itemvalue="Go Test.TestProblemHandler_ListProblems in github.com/ecnuvj/vhoj_problem/pkg/handler" />
       </list>
     </recent_temporary>
@@ -146,22 +156,22 @@
       <screen x="0" y="0" width="1536" height="864" />
     </state>
     <state x="425" y="209" key="EditFileWatcherDialog/0.0.1536.864@0.0.1536.864" timestamp="1613638706887" />
-    <state width="1493" height="223" key="GridCell.Tab.0.bottom" timestamp="1613657020363">
+    <state width="1493" height="223" key="GridCell.Tab.0.bottom" timestamp="1613724662289">
       <screen x="0" y="0" width="1536" height="864" />
     </state>
-    <state width="1493" height="223" key="GridCell.Tab.0.bottom/0.0.1536.864@0.0.1536.864" timestamp="1613657020363" />
-    <state width="1493" height="223" key="GridCell.Tab.0.center" timestamp="1613657020363">
+    <state width="1493" height="223" key="GridCell.Tab.0.bottom/0.0.1536.864@0.0.1536.864" timestamp="1613724662289" />
+    <state width="1493" height="223" key="GridCell.Tab.0.center" timestamp="1613724662289">
       <screen x="0" y="0" width="1536" height="864" />
     </state>
-    <state width="1493" height="223" key="GridCell.Tab.0.center/0.0.1536.864@0.0.1536.864" timestamp="1613657020363" />
-    <state width="1493" height="223" key="GridCell.Tab.0.left" timestamp="1613657020363">
+    <state width="1493" height="223" key="GridCell.Tab.0.center/0.0.1536.864@0.0.1536.864" timestamp="1613724662289" />
+    <state width="1493" height="223" key="GridCell.Tab.0.left" timestamp="1613724662289">
       <screen x="0" y="0" width="1536" height="864" />
     </state>
-    <state width="1493" height="223" key="GridCell.Tab.0.left/0.0.1536.864@0.0.1536.864" timestamp="1613657020363" />
-    <state width="1493" height="223" key="GridCell.Tab.0.right" timestamp="1613657020363">
+    <state width="1493" height="223" key="GridCell.Tab.0.left/0.0.1536.864@0.0.1536.864" timestamp="1613724662289" />
+    <state width="1493" height="223" key="GridCell.Tab.0.right" timestamp="1613724662289">
       <screen x="0" y="0" width="1536" height="864" />
     </state>
-    <state width="1493" height="223" key="GridCell.Tab.0.right/0.0.1536.864@0.0.1536.864" timestamp="1613657020363" />
+    <state width="1493" height="223" key="GridCell.Tab.0.right/0.0.1536.864@0.0.1536.864" timestamp="1613724662289" />
     <state x="270" y="77" key="SettingsEditor" timestamp="1613638709898">
       <screen x="0" y="0" width="1536" height="864" />
     </state>

@@ -122,25 +122,107 @@ func (p *ProblemHandler) ListContests(ctx context.Context, request *problempb.Li
 }
 
 func (p *ProblemHandler) GetContestById(ctx context.Context, request *problempb.GetContestByIdRequest) (*problempb.GetContestByIdResponse, error) {
-	panic("implement me")
+	if request == nil {
+		return &problempb.GetContestByIdResponse{
+			BaseResponse: util.PbReplyf(base.REPLY_STATUS_FAILURE, "get contest request is nil"),
+		}, fmt.Errorf("get contest request is nil")
+	}
+	rpcContest, err := p.ProblemService.GetContest(uint(request.ContestId))
+	if err != nil {
+		return &problempb.GetContestByIdResponse{
+			BaseResponse: util.PbReplyf(base.REPLY_STATUS_FAILURE, "service error: %v", err),
+		}, fmt.Errorf("service error: %v", err)
+	}
+	return &problempb.GetContestByIdResponse{
+		Contest:      rpcContest,
+		BaseResponse: util.PbReplyf(base.REPLY_STATUS_SUCCESS, "success"),
+	}, nil
 }
 
 func (p *ProblemHandler) AddContestParticipant(ctx context.Context, request *problempb.AddContestParticipantRequest) (*problempb.AddContestParticipantResponse, error) {
-	panic("implement me")
+	if request == nil {
+		return &problempb.AddContestParticipantResponse{
+			BaseResponse: util.PbReplyf(base.REPLY_STATUS_FAILURE, "join contest request is nil"),
+		}, fmt.Errorf("join contest request is nil")
+	}
+	err := p.ProblemService.JoinContest(uint(request.ContestId), []uint{uint(request.UserId)})
+	if err != nil {
+		return &problempb.AddContestParticipantResponse{
+			BaseResponse: util.PbReplyf(base.REPLY_STATUS_FAILURE, "service error: %v", err),
+		}, fmt.Errorf("service error: %v", err)
+	}
+	return &problempb.AddContestParticipantResponse{
+		BaseResponse: util.PbReplyf(base.REPLY_STATUS_SUCCESS, "success"),
+	}, nil
 }
 
 func (p *ProblemHandler) GenerateContestParticipants(ctx context.Context, request *problempb.GenerateContestParticipantsRequest) (*problempb.GenerateContestParticipantsResponse, error) {
-	panic("implement me")
+	if request == nil {
+		return &problempb.GenerateContestParticipantsResponse{
+			BaseResponse: util.PbReplyf(base.REPLY_STATUS_FAILURE, "generate contest user request is nil"),
+		}, fmt.Errorf("generate contest user request is nil")
+	}
+	users, err := p.ProblemService.GenerateContestParticipants(uint(request.ContestId), request.GenerateCount)
+	if err != nil {
+		return &problempb.GenerateContestParticipantsResponse{
+			BaseResponse: util.PbReplyf(base.REPLY_STATUS_FAILURE, "service error: %v", err),
+		}, fmt.Errorf("service error: %v", err)
+	}
+	return &problempb.GenerateContestParticipantsResponse{
+		Users:        users,
+		BaseResponse: util.PbReplyf(base.REPLY_STATUS_SUCCESS, "success"),
+	}, nil
 }
 
 func (p *ProblemHandler) AddContestAdmin(ctx context.Context, request *problempb.AddContestAdminRequest) (*problempb.AddContestAdminResponse, error) {
-	panic("implement me")
+	if request == nil {
+		return &problempb.AddContestAdminResponse{
+			BaseResponse: util.PbReplyf(base.REPLY_STATUS_FAILURE, "add contest admin request is nil"),
+		}, fmt.Errorf("add contest admin request is nil")
+	}
+	err := p.ProblemService.AddContestAdmins(uint(request.ContestId), []uint{uint(request.UserId)})
+	if err != nil {
+		return &problempb.AddContestAdminResponse{
+			BaseResponse: util.PbReplyf(base.REPLY_STATUS_FAILURE, "service error: %v", err),
+		}, fmt.Errorf("service error: %v", err)
+	}
+	return &problempb.AddContestAdminResponse{
+		BaseResponse: util.PbReplyf(base.REPLY_STATUS_SUCCESS, "success"),
+	}, nil
 }
 
 func (p *ProblemHandler) GetContestAdmins(ctx context.Context, request *problempb.GetContestAdminsRequest) (*problempb.GetContestAdminsResponse, error) {
-	panic("implement me")
+	if request == nil {
+		return &problempb.GetContestAdminsResponse{
+			BaseResponse: util.PbReplyf(base.REPLY_STATUS_FAILURE, "get contest admin request is nil"),
+		}, fmt.Errorf("get contest admin request is nil")
+	}
+	users, err := p.ProblemService.GetContestAdmins(uint(request.ContestId))
+	if err != nil {
+		return &problempb.GetContestAdminsResponse{
+			BaseResponse: util.PbReplyf(base.REPLY_STATUS_FAILURE, "service error: %v", err),
+		}, fmt.Errorf("service error: %v", err)
+	}
+	return &problempb.GetContestAdminsResponse{
+		Users:        users,
+		BaseResponse: util.PbReplyf(base.REPLY_STATUS_SUCCESS, "success"),
+	}, nil
 }
 
 func (p *ProblemHandler) GetContestParticipants(ctx context.Context, request *problempb.GetContestParticipantsRequest) (*problempb.GetContestParticipantsResponse, error) {
-	panic("implement me")
+	if request == nil {
+		return &problempb.GetContestParticipantsResponse{
+			BaseResponse: util.PbReplyf(base.REPLY_STATUS_FAILURE, "get contest participants request is nil"),
+		}, fmt.Errorf("get contest participants request is nil")
+	}
+	users, err := p.ProblemService.GetContestParticipants(uint(request.ContestId))
+	if err != nil {
+		return &problempb.GetContestParticipantsResponse{
+			BaseResponse: util.PbReplyf(base.REPLY_STATUS_FAILURE, "service error: %v", err),
+		}, fmt.Errorf("service error: %v", err)
+	}
+	return &problempb.GetContestParticipantsResponse{
+		Users:        users,
+		BaseResponse: util.PbReplyf(base.REPLY_STATUS_SUCCESS, "success"),
+	}, nil
 }
