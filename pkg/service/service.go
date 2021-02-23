@@ -1,13 +1,15 @@
 package service
 
 import (
+	"context"
 	"github.com/ecnuvj/vhoj_db/pkg/dao/mapper/contest_mapper"
 	"github.com/ecnuvj/vhoj_db/pkg/dao/mapper/problem_mapper"
-	"github.com/ecnuvj/vhoj_db/pkg/dao/mapper/user_mapper"
 	"github.com/ecnuvj/vhoj_db/pkg/dao/model"
 	"github.com/ecnuvj/vhoj_problem/pkg/adapter"
 	"github.com/ecnuvj/vhoj_problem/pkg/common"
 	"github.com/ecnuvj/vhoj_problem/pkg/sdk/problempb"
+	"github.com/ecnuvj/vhoj_rpc/client/rpc_user"
+	"github.com/ecnuvj/vhoj_rpc/model/userpb"
 )
 
 type ProblemService struct {
@@ -125,14 +127,26 @@ func (ProblemService) AddContestAdmins(contestId uint, userIds []uint) error {
 }
 
 func (p *ProblemService) GenerateContestParticipants(contestId uint, count int32) ([]*problempb.User, error) {
-	//todo user generate
-	var userIds []uint
-	err := p.JoinContest(contestId, userIds)
+	request := &userpb.GenerateUsersRequest{
+		GenerateCount: count,
+		ContestId:     uint64(contestId),
+	}
+	resp, err := rpc_user.UserServiceClient.GenerateUsers(context.Background(), request)
 	if err != nil {
-		//todo delete users
 		return nil, err
 	}
-	return nil, nil
+	userIds := make([]uint, len(resp.Users))
+	users := make([]*problempb.User, len(resp.Users))
+	for i, user := range resp.Users {
+		userIds[i] = uint(user.UserId)
+		users[i] = adapter.UserToRpcUser(user)
+	}
+	err = p.JoinContest(contestId, userIds)
+	if err != nil {
+		return nil, err
+	}
+
+	return users, nil
 }
 
 func (ProblemService) GetContestAdmins(contestId uint) ([]*problempb.User, error) {
@@ -140,13 +154,17 @@ func (ProblemService) GetContestAdmins(contestId uint) ([]*problempb.User, error
 	if err != nil {
 		return nil, err
 	}
-	users, err := user_mapper.UserMapper.FindUsersByIds(userIds)
+
+	request := &userpb.GetUsersByIdsRequest{
+		UserIds: adapter.UintsToUint64s(userIds),
+	}
+	resp, err := rpc_user.UserServiceClient.GetUsersByIds(context.Background(), request)
 	if err != nil {
 		return nil, err
 	}
-	rpcUsers := make([]*problempb.User, len(users))
-	for i, u := range users {
-		rpcUsers[i] = adapter.ModelUserToRpcUser(u)
+	rpcUsers := make([]*problempb.User, len(resp.Users))
+	for i, u := range resp.Users {
+		rpcUsers[i] = adapter.UserToRpcUser(u)
 	}
 	return rpcUsers, nil
 }
@@ -156,13 +174,16 @@ func (ProblemService) GetContestParticipants(contestId uint) ([]*problempb.User,
 	if err != nil {
 		return nil, err
 	}
-	users, err := user_mapper.UserMapper.FindUsersByIds(userIds)
+	request := &userpb.GetUsersByIdsRequest{
+		UserIds: adapter.UintsToUint64s(userIds),
+	}
+	resp, err := rpc_user.UserServiceClient.GetUsersByIds(context.Background(), request)
 	if err != nil {
 		return nil, err
 	}
-	rpcUsers := make([]*problempb.User, len(users))
-	for i, u := range users {
-		rpcUsers[i] = adapter.ModelUserToRpcUser(u)
+	rpcUsers := make([]*problempb.User, len(resp.Users))
+	for i, u := range resp.Users {
+		rpcUsers[i] = adapter.UserToRpcUser(u)
 	}
 	return rpcUsers, nil
 }

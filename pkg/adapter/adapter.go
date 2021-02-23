@@ -3,6 +3,7 @@ package adapter
 import (
 	"github.com/ecnuvj/vhoj_db/pkg/dao/model"
 	"github.com/ecnuvj/vhoj_problem/pkg/sdk/problempb"
+	"github.com/ecnuvj/vhoj_rpc/model/userpb"
 	"github.com/golang/protobuf/ptypes"
 )
 
@@ -45,4 +46,28 @@ func ModelUserToRpcUser(user *model.User) *problempb.User {
 		UserId:   uint64(user.ID),
 		Username: user.Nickname,
 	}
+}
+
+func UserToRpcUser(user *userpb.User) *problempb.User {
+	return &problempb.User{
+		UserId:   user.UserId,
+		Username: user.Username,
+		Password: user.Password,
+	}
+}
+
+func UintsToUint64s(ids []uint) []uint64 {
+	ret := make([]uint64, len(ids))
+	for i, id := range ids {
+		ret[i] = uint64(id)
+	}
+	return ret
+}
+
+func Uint64sToUints(ids []int64) []uint {
+	ret := make([]uint, len(ids))
+	for i, id := range ids {
+		ret[i] = uint(id)
+	}
+	return ret
 }
