@@ -6,7 +6,7 @@ import (
 )
 
 func Init() {
-	err := datasource.ConnectDB("../../config/mysql.yaml")
+	err := datasource.ConnectDB("./config/mysql.yaml")
 	if err != nil {
 		panic(fmt.Sprintf("connect db error: %v", err))
 	}
