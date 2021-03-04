@@ -1,6 +1,6 @@
 syntax = "proto3";
 
-option go_package = "github.com/ecnuvj/vhoj_problem/pkg/sdk/base";
+option go_package = "github.com/ecnuvj/vhoj_rpc/model/base";
 
 package base;
 

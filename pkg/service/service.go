@@ -38,10 +38,7 @@ func (ProblemService) GetProblem(problemId uint) (*problempb.Problem, error) {
 	return adapter.ModelProblemToRpcProblem(problem), nil
 }
 
-func (ProblemService) SearchProblem(condition *common.SearchCondition, pageNo int32, pageSize int32) ([]*problempb.Problem, *common.PageInfo, error) {
-	if (condition == nil) || (condition.ProblemId == 0 && condition.Title == "") {
-		return nil, &common.PageInfo{}, nil
-	}
+func (ProblemService) SearchProblem(condition *common.ProblemSearchCondition, pageNo int32, pageSize int32) ([]*problempb.Problem, *common.PageInfo, error) {
 	problems, count, err := problem_mapper.ProblemMapper.SearchProblemByCondition(&problem_mapper.ProblemSearchParam{
 		Title:     condition.Title,
 		ProblemId: condition.ProblemId,
@@ -59,7 +56,7 @@ func (ProblemService) SearchProblem(condition *common.SearchCondition, pageNo in
 	}, nil
 }
 
-func (ProblemService) CreateContest(contest *problempb.Contest) (*model.Contest, error) {
+func (ProblemService) CreateContest(contest *problempb.Contest) (*problempb.Contest, error) {
 	problemIds := make([]uint, len(contest.ProblemIds))
 	for i, p := range contest.ProblemIds {
 		problemIds[i] = uint(p)
@@ -77,11 +74,30 @@ func (ProblemService) CreateContest(contest *problempb.Contest) (*model.Contest,
 	if err != nil {
 		return nil, err
 	}
-	return retContest, nil
+	return adapter.ModelContestToRpcContest(retContest), nil
 }
 
 func (ProblemService) ListContests(pageNo int32, pageSize int32) ([]*problempb.Contest, *common.PageInfo, error) {
 	contests, count, err := contest_mapper.ContestMapper.FindAllContests(pageNo, pageSize)
+	if err != nil {
+		return nil, &common.PageInfo{}, err
+	}
+	rpcContests := make([]*problempb.Contest, len(contests))
+	for i, c := range contests {
+		rpcContests[i] = adapter.ModelContestToRpcContest(c)
+	}
+	return rpcContests, &common.PageInfo{
+		TotalPages: (count + pageSize - 1) / pageSize,
+		TotalCount: count,
+	}, nil
+}
+
+func (ProblemService) SearchContest(condition *common.ContestSearchCondition, pageNo int32, pageSize int32) ([]*problempb.Contest, *common.PageInfo, error) {
+	contests, count, err := contest_mapper.ContestMapper.FindContestsByCondition(&contest_mapper.SearchContestCondition{
+		Status:      condition.Status,
+		Title:       condition.Title,
+		CreatorName: condition.CreatorName,
+	}, pageNo, pageSize)
 	if err != nil {
 		return nil, &common.PageInfo{}, err
 	}
@@ -101,12 +117,8 @@ func (ProblemService) GetContest(contestId uint) (*problempb.Contest, error) {
 		return nil, err
 	}
 	rpcContest := adapter.ModelContestToRpcContest(contest)
-	rpcProblems := make([]*problempb.Problem, len(contest.ProblemIds))
-	for i, problemId := range contest.ProblemIds {
-		problem, _ := problem_mapper.ProblemMapper.FindProblemById(problemId)
-		rpcProblems[i] = adapter.ModelProblemToRpcProblem(problem)
-	}
-	rpcContest.Problems = rpcProblems
+	problems, _ := problem_mapper.ProblemMapper.FindProblemsByIds(contest.ProblemIds)
+	rpcContest.Problems = adapter.ModelProblemsToRpcProblems(problems)
 	return rpcContest, nil
 }
 
@@ -126,7 +138,7 @@ func (ProblemService) AddContestAdmins(contestId uint, userIds []uint) error {
 	return nil
 }
 
-func (p *ProblemService) GenerateContestParticipants(contestId uint, count int32) ([]*problempb.User, error) {
+func (p *ProblemService) GenerateContestParticipants(contestId uint, count int32) ([]*userpb.User, error) {
 	request := &userpb.GenerateUsersRequest{
 		GenerateCount: count,
 		ContestId:     uint64(contestId),
@@ -136,20 +148,18 @@ func (p *ProblemService) GenerateContestParticipants(contestId uint, count int32
 		return nil, err
 	}
 	userIds := make([]uint, len(resp.Users))
-	users := make([]*problempb.User, len(resp.Users))
 	for i, user := range resp.Users {
 		userIds[i] = uint(user.UserId)
-		users[i] = adapter.UserToRpcUser(user)
 	}
 	err = p.JoinContest(contestId, userIds)
 	if err != nil {
 		return nil, err
 	}
 
-	return users, nil
+	return resp.Users, nil
 }
 
-func (ProblemService) GetContestAdmins(contestId uint) ([]*problempb.User, error) {
+func (ProblemService) GetContestAdmins(contestId uint) ([]*userpb.User, error) {
 	userIds, err := contest_mapper.ContestMapper.FindContestAdmins(contestId)
 	if err != nil {
 		return nil, err
@@ -162,14 +172,11 @@ func (ProblemService) GetContestAdmins(contestId uint) ([]*problempb.User, error
 	if err != nil {
 		return nil, err
 	}
-	rpcUsers := make([]*problempb.User, len(resp.Users))
-	for i, u := range resp.Users {
-		rpcUsers[i] = adapter.UserToRpcUser(u)
-	}
-	return rpcUsers, nil
+
+	return resp.Users, nil
 }
 
-func (ProblemService) GetContestParticipants(contestId uint) ([]*problempb.User, error) {
+func (ProblemService) GetContestParticipants(contestId uint) ([]*userpb.User, error) {
 	userIds, err := contest_mapper.ContestMapper.FindContestParticipants(contestId)
 	if err != nil {
 		return nil, err
@@ -181,9 +188,5 @@ func (ProblemService) GetContestParticipants(contestId uint) ([]*problempb.User,
 	if err != nil {
 		return nil, err
 	}
-	rpcUsers := make([]*problempb.User, len(resp.Users))
-	for i, u := range resp.Users {
-		rpcUsers[i] = adapter.UserToRpcUser(u)
-	}
-	return rpcUsers, nil
+	return resp.Users, nil
 }

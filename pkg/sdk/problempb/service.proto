@@ -7,7 +7,7 @@ package sdk;
 import "base/base.proto";
 import "problempb/contest.proto";
 import "problempb/problem.proto";
-import "problempb/user.proto";
+import "include/userpb/user.proto";
 
 service ProblemService {
     rpc ListProblems(ListProblemsRequest) returns(ListProblemsResponse) {};
@@ -15,6 +15,7 @@ service ProblemService {
     rpc SearchProblemByCondition(SearchProblemByConditionRequest) returns(SearchProblemByConditionResponse) {};
     rpc CreateContest(CreateContestRequest) returns(CreateContestResponse) {};
     rpc ListContests(ListContestsRequest) returns(ListContestsResponse) {};
+    rpc SearchContestByCondition(SearchContestByConditionRequest) returns(SearchContestByConditionResponse) {};
     rpc GetContestById(GetContestByIdRequest) returns(GetContestByIdResponse) {};
     rpc AddContestParticipant(AddContestParticipantRequest) returns(AddContestParticipantResponse) {};
     rpc GenerateContestParticipants(GenerateContestParticipantsRequest) returns(GenerateContestParticipantsResponse) {};
@@ -64,7 +65,7 @@ message CreateContestRequest {
 }
 
 message CreateContestResponse {
-    uint64 contest_id = 1;
+    Contest contest = 1;
     base.BaseResponse base_response = 2;
 }
 
@@ -75,7 +76,22 @@ message ListContestsRequest {
 
 message ListContestsResponse {
     repeated Contest contests = 1;
-    int32 total_page = 2;
+    int32 total_pages = 2;
+    int32 total_count = 3;
+    base.BaseResponse base_response = 4;
+}
+
+message SearchContestByConditionRequest {
+    int32 status = 1;
+    string title = 2;
+    string creator_name = 3;
+    int32 page_no = 4;
+    int32 page_size = 5;
+}
+
+message SearchContestByConditionResponse {
+    repeated Contest contests = 1;
+    int32 total_pages = 2;
     int32 total_count = 3;
     base.BaseResponse base_response = 4;
 }

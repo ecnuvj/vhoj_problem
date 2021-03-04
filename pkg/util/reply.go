@@ -2,7 +2,7 @@ package util
 
 import (
 	"fmt"
-	"github.com/ecnuvj/vhoj_problem/pkg/sdk/base"
+	"github.com/ecnuvj/vhoj_rpc/model/base"
 )
 
 func PbReplyf(status base.REPLY_STATUS, format string, args ...interface{}) *base.BaseResponse {

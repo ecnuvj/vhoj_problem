@@ -8,6 +8,9 @@ import (
 )
 
 func ModelProblemToRpcProblem(problem *model.Problem) *problempb.Problem {
+	if problem.RawProblem == nil {
+		return &problempb.Problem{}
+	}
 	return &problempb.Problem{
 		ProblemId:    uint64(problem.ID),
 		Title:        problem.RawProblem.Title,
@@ -21,6 +24,14 @@ func ModelProblemToRpcProblem(problem *model.Problem) *problempb.Problem {
 		Submitted:    problem.Submitted,
 		Accepted:     problem.Accepted,
 	}
+}
+
+func ModelProblemsToRpcProblems(problems []*model.Problem) []*problempb.Problem {
+	retProblems := make([]*problempb.Problem, len(problems))
+	for i, p := range problems {
+		retProblems[i] = ModelProblemToRpcProblem(p)
+	}
+	return retProblems
 }
 
 func ModelContestToRpcContest(contest *model.Contest) *problempb.Contest {
@@ -41,19 +52,35 @@ func ModelContestToRpcContest(contest *model.Contest) *problempb.Contest {
 	}
 }
 
-func ModelUserToRpcUser(user *model.User) *problempb.User {
-	return &problempb.User{
-		UserId:   uint64(user.ID),
-		Username: user.Nickname,
+func ModelUserToRpcUser(user *model.User) *userpb.User {
+	var userAuthId uint64
+	var password string
+	if user.UserAuth != nil {
+		userAuthId = uint64(user.UserAuth.ID)
+		password = user.UserAuth.Password
+	}
+	return &userpb.User{
+		UserId:     uint64(user.ID),
+		Username:   user.Nickname,
+		UserAuthId: userAuthId,
+		Password:   password,
+		Email:      user.Email,
+		School:     user.School,
+		Roles:      ModelRolesToRpcRoles(user.Roles),
+		Accepted:   user.Accepted,
+		Submitted:  user.Submitted,
 	}
 }
 
-func UserToRpcUser(user *userpb.User) *problempb.User {
-	return &problempb.User{
-		UserId:   user.UserId,
-		Username: user.Username,
-		Password: user.Password,
+func ModelRolesToRpcRoles(roles []*model.Role) []*userpb.Role {
+	retRoles := make([]*userpb.Role, len(roles))
+	for i, r := range roles {
+		retRoles[i] = &userpb.Role{
+			RoleId:   uint64(r.ID),
+			RoleName: r.RoleName,
+		}
 	}
+	return retRoles
 }
 
 func UintsToUint64s(ids []uint) []uint64 {

@@ -4,7 +4,7 @@ option go_package = "github.com/ecnuvj/vhoj_problem/pkg/sdk/problempb";
 
 package sdk;
 
-import "problempb/user.proto";
+import "include/userpb/user.proto";
 import "problempb/problem.proto";
 import "include/google/protobuf/timestamp.proto";
 

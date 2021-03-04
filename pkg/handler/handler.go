@@ -3,11 +3,12 @@ package handler
 import (
 	"context"
 	"fmt"
+	"github.com/ecnuvj/vhoj_common/pkg/common/constants/contest_status"
 	"github.com/ecnuvj/vhoj_problem/pkg/common"
-	"github.com/ecnuvj/vhoj_problem/pkg/sdk/base"
 	"github.com/ecnuvj/vhoj_problem/pkg/sdk/problempb"
 	"github.com/ecnuvj/vhoj_problem/pkg/service"
 	"github.com/ecnuvj/vhoj_problem/pkg/util"
+	"github.com/ecnuvj/vhoj_rpc/model/base"
 )
 
 type ProblemHandler struct {
@@ -65,7 +66,7 @@ func (p *ProblemHandler) SearchProblemByCondition(ctx context.Context, request *
 			BaseResponse: util.PbReplyf(base.REPLY_STATUS_FAILURE, "search problem request is nil"),
 		}, fmt.Errorf("search problem request is nil")
 	}
-	condition := &common.SearchCondition{
+	condition := &common.ProblemSearchCondition{
 		Title:     request.Title,
 		ProblemId: uint(request.ProblemId),
 	}
@@ -96,7 +97,7 @@ func (p *ProblemHandler) CreateContest(ctx context.Context, request *problempb.C
 		}, fmt.Errorf("service error: %v", err)
 	}
 	return &problempb.CreateContestResponse{
-		ContestId:    uint64(contest.ID),
+		Contest:      contest,
 		BaseResponse: util.PbReplyf(base.REPLY_STATUS_SUCCESS, "success"),
 	}, nil
 }
@@ -115,6 +116,31 @@ func (p *ProblemHandler) ListContests(ctx context.Context, request *problempb.Li
 	}
 	return &problempb.ListContestsResponse{
 		Contests:     rpcContests,
+		TotalPage:    pageInfo.TotalPages,
+		TotalCount:   pageInfo.TotalCount,
+		BaseResponse: util.PbReplyf(base.REPLY_STATUS_SUCCESS, "success"),
+	}, nil
+}
+
+func (p *ProblemHandler) SearchContestByCondition(ctx context.Context, request *problempb.SearchContestByConditionRequest) (*problempb.SearchContestByConditionResponse, error) {
+	if request == nil {
+		return &problempb.SearchContestByConditionResponse{
+			BaseResponse: util.PbReplyf(base.REPLY_STATUS_FAILURE, "request is nil"),
+		}, fmt.Errorf("request is nil")
+	}
+	condition := &common.ContestSearchCondition{
+		Status:      contest_status.ContestStatus(request.Status),
+		Title:       request.Title,
+		CreatorName: request.CreatorName,
+	}
+	contests, pageInfo, err := p.ProblemService.SearchContest(condition, request.PageNo, request.PageSize)
+	if err != nil {
+		return &problempb.SearchContestByConditionResponse{
+			BaseResponse: util.PbReplyf(base.REPLY_STATUS_FAILURE, "service error: %v", err),
+		}, fmt.Errorf("service error: %v", err)
+	}
+	return &problempb.SearchContestByConditionResponse{
+		Contests:     contests,
 		TotalPage:    pageInfo.TotalPages,
 		TotalCount:   pageInfo.TotalCount,
 		BaseResponse: util.PbReplyf(base.REPLY_STATUS_SUCCESS, "success"),

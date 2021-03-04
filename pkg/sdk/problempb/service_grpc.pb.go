@@ -22,6 +22,7 @@ type ProblemServiceClient interface {
 	SearchProblemByCondition(ctx context.Context, in *SearchProblemByConditionRequest, opts ...grpc.CallOption) (*SearchProblemByConditionResponse, error)
 	CreateContest(ctx context.Context, in *CreateContestRequest, opts ...grpc.CallOption) (*CreateContestResponse, error)
 	ListContests(ctx context.Context, in *ListContestsRequest, opts ...grpc.CallOption) (*ListContestsResponse, error)
+	SearchContestByCondition(ctx context.Context, in *SearchContestByConditionRequest, opts ...grpc.CallOption) (*SearchContestByConditionResponse, error)
 	GetContestById(ctx context.Context, in *GetContestByIdRequest, opts ...grpc.CallOption) (*GetContestByIdResponse, error)
 	AddContestParticipant(ctx context.Context, in *AddContestParticipantRequest, opts ...grpc.CallOption) (*AddContestParticipantResponse, error)
 	GenerateContestParticipants(ctx context.Context, in *GenerateContestParticipantsRequest, opts ...grpc.CallOption) (*GenerateContestParticipantsResponse, error)
@@ -77,6 +78,15 @@ func (c *problemServiceClient) CreateContest(ctx context.Context, in *CreateCont
 func (c *problemServiceClient) ListContests(ctx context.Context, in *ListContestsRequest, opts ...grpc.CallOption) (*ListContestsResponse, error) {
 	out := new(ListContestsResponse)
 	err := c.cc.Invoke(ctx, "/sdk.ProblemService/ListContests", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *problemServiceClient) SearchContestByCondition(ctx context.Context, in *SearchContestByConditionRequest, opts ...grpc.CallOption) (*SearchContestByConditionResponse, error) {
+	out := new(SearchContestByConditionResponse)
+	err := c.cc.Invoke(ctx, "/sdk.ProblemService/SearchContestByCondition", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -146,6 +156,7 @@ type ProblemServiceServer interface {
 	SearchProblemByCondition(context.Context, *SearchProblemByConditionRequest) (*SearchProblemByConditionResponse, error)
 	CreateContest(context.Context, *CreateContestRequest) (*CreateContestResponse, error)
 	ListContests(context.Context, *ListContestsRequest) (*ListContestsResponse, error)
+	SearchContestByCondition(context.Context, *SearchContestByConditionRequest) (*SearchContestByConditionResponse, error)
 	GetContestById(context.Context, *GetContestByIdRequest) (*GetContestByIdResponse, error)
 	AddContestParticipant(context.Context, *AddContestParticipantRequest) (*AddContestParticipantResponse, error)
 	GenerateContestParticipants(context.Context, *GenerateContestParticipantsRequest) (*GenerateContestParticipantsResponse, error)
@@ -173,6 +184,9 @@ func (UnimplementedProblemServiceServer) CreateContest(context.Context, *CreateC
 }
 func (UnimplementedProblemServiceServer) ListContests(context.Context, *ListContestsRequest) (*ListContestsResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method ListContests not implemented")
+}
+func (UnimplementedProblemServiceServer) SearchContestByCondition(context.Context, *SearchContestByConditionRequest) (*SearchContestByConditionResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method SearchContestByCondition not implemented")
 }
 func (UnimplementedProblemServiceServer) GetContestById(context.Context, *GetContestByIdRequest) (*GetContestByIdResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetContestById not implemented")
@@ -291,6 +305,24 @@ func _ProblemService_ListContests_Handler(srv interface{}, ctx context.Context, 
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(ProblemServiceServer).ListContests(ctx, req.(*ListContestsRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _ProblemService_SearchContestByCondition_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(SearchContestByConditionRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ProblemServiceServer).SearchContestByCondition(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/sdk.ProblemService/SearchContestByCondition",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ProblemServiceServer).SearchContestByCondition(ctx, req.(*SearchContestByConditionRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -426,6 +458,10 @@ var _ProblemService_serviceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "ListContests",
 			Handler:    _ProblemService_ListContests_Handler,
+		},
+		{
+			MethodName: "SearchContestByCondition",
+			Handler:    _ProblemService_SearchContestByCondition_Handler,
 		},
 		{
 			MethodName: "GetContestById",

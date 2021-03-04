@@ -1,0 +1,19 @@
+syntax = "proto3";
+
+option go_package = "github.com/ecnuvj/vhoj_rpc/model/userpb";
+
+package sdk;
+
+import "include/userpb/role.proto";
+
+message User {
+    uint64 user_id = 1;
+    string username = 2;
+    uint64 user_auth_id = 3;
+    string password = 4;
+    string email = 5;
+    string school = 6;
+    repeated Role roles = 7;
+    int64 accepted = 8;
+    int64 submitted = 9;
+}
