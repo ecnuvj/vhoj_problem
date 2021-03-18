@@ -116,7 +116,7 @@ func (p *ProblemHandler) ListContests(ctx context.Context, request *problempb.Li
 	}
 	return &problempb.ListContestsResponse{
 		Contests:     rpcContests,
-		TotalPage:    pageInfo.TotalPages,
+		TotalPages:   pageInfo.TotalPages,
 		TotalCount:   pageInfo.TotalCount,
 		BaseResponse: util.PbReplyf(base.REPLY_STATUS_SUCCESS, "success"),
 	}, nil
@@ -141,7 +141,7 @@ func (p *ProblemHandler) SearchContestByCondition(ctx context.Context, request *
 	}
 	return &problempb.SearchContestByConditionResponse{
 		Contests:     contests,
-		TotalPage:    pageInfo.TotalPages,
+		TotalPages:   pageInfo.TotalPages,
 		TotalCount:   pageInfo.TotalCount,
 		BaseResponse: util.PbReplyf(base.REPLY_STATUS_SUCCESS, "success"),
 	}, nil
@@ -249,6 +249,75 @@ func (p *ProblemHandler) GetContestParticipants(ctx context.Context, request *pr
 	}
 	return &problempb.GetContestParticipantsResponse{
 		Users:        users,
+		BaseResponse: util.PbReplyf(base.REPLY_STATUS_SUCCESS, "success"),
+	}, nil
+}
+
+func (p *ProblemHandler) AddContestProblem(ctx context.Context, request *problempb.AddContestProblemRequest) (*problempb.AddContestProblemResponse, error) {
+	if request == nil {
+		return &problempb.AddContestProblemResponse{
+			BaseResponse: util.PbReplyf(base.REPLY_STATUS_FAILURE, "request is nil"),
+		}, fmt.Errorf("request is nil")
+	}
+	err := p.ProblemService.AddContestProblem(uint(request.ContestId), uint(request.ProblemId))
+	if err != nil {
+		return &problempb.AddContestProblemResponse{
+			BaseResponse: util.PbReplyf(base.REPLY_STATUS_FAILURE, "service error: %v", err),
+		}, fmt.Errorf("service error: %v", err)
+	}
+	return &problempb.AddContestProblemResponse{
+		BaseResponse: util.PbReplyf(base.REPLY_STATUS_SUCCESS, "success"),
+	}, nil
+}
+
+func (p *ProblemHandler) DeleteContestProblem(ctx context.Context, request *problempb.DeleteContestProblemRequest) (*problempb.DeleteContestProblemResponse, error) {
+	if request == nil {
+		return &problempb.DeleteContestProblemResponse{
+			BaseResponse: util.PbReplyf(base.REPLY_STATUS_FAILURE, "request is nil"),
+		}, fmt.Errorf("request is nil")
+	}
+	err := p.ProblemService.DeleteContestProblem(uint(request.ContestId), uint(request.ProblemId))
+	if err != nil {
+		return &problempb.DeleteContestProblemResponse{
+			BaseResponse: util.PbReplyf(base.REPLY_STATUS_FAILURE, "service error", err),
+		}, fmt.Errorf("service error: %v", err)
+	}
+	return &problempb.DeleteContestProblemResponse{
+		BaseResponse: util.PbReplyf(base.REPLY_STATUS_SUCCESS, "success"),
+	}, nil
+}
+
+func (p *ProblemHandler) DeleteContestAdmin(ctx context.Context, request *problempb.DeleteContestAdminRequest) (*problempb.DeleteContestAdminResponse, error) {
+	if request == nil {
+		return &problempb.DeleteContestAdminResponse{
+			BaseResponse: util.PbReplyf(base.REPLY_STATUS_FAILURE, "request is nil"),
+		}, fmt.Errorf("request is nil")
+	}
+	err := p.ProblemService.DeleteContestAdmin(uint(request.ContestId), uint(request.UserId))
+	if err != nil {
+		return &problempb.DeleteContestAdminResponse{
+			BaseResponse: util.PbReplyf(base.REPLY_STATUS_FAILURE, "service error: %v", err),
+		}, fmt.Errorf("service error: %v", err)
+	}
+	return &problempb.DeleteContestAdminResponse{
+		BaseResponse: util.PbReplyf(base.REPLY_STATUS_SUCCESS, "success"),
+	}, nil
+}
+
+func (p *ProblemHandler) UpdateContest(ctx context.Context, request *problempb.UpdateContestRequest) (*problempb.UpdateContestResponse, error) {
+	if request == nil {
+		return &problempb.UpdateContestResponse{
+			BaseResponse: util.PbReplyf(base.REPLY_STATUS_FAILURE, "request is nil"),
+		}, fmt.Errorf("request is nil")
+	}
+	contest, err := p.ProblemService.UpdateContest(request.Contest)
+	if err != nil {
+		return &problempb.UpdateContestResponse{
+			BaseResponse: util.PbReplyf(base.REPLY_STATUS_FAILURE, "service error: %v", err),
+		}, fmt.Errorf("service error: %v", err)
+	}
+	return &problempb.UpdateContestResponse{
+		Contest:      contest,
 		BaseResponse: util.PbReplyf(base.REPLY_STATUS_SUCCESS, "success"),
 	}, nil
 }

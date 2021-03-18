@@ -22,6 +22,47 @@ service ProblemService {
     rpc AddContestAdmin(AddContestAdminRequest) returns(AddContestAdminResponse) {};
     rpc GetContestAdmins(GetContestAdminsRequest) returns(GetContestAdminsResponse) {};
     rpc GetContestParticipants(GetContestParticipantsRequest) returns(GetContestParticipantsResponse) {};
+    rpc AddContestProblem(AddContestProblemRequest) returns(AddContestProblemResponse) {};
+    rpc DeleteContestProblem(DeleteContestProblemRequest) returns(DeleteContestProblemResponse) {};
+    rpc DeleteContestAdmin(DeleteContestAdminRequest) returns(DeleteContestAdminResponse) {};
+    rpc UpdateContest(UpdateContestRequest) returns(UpdateContestResponse) {};
+}
+
+message UpdateContestRequest {
+    uint64 contest_id = 1;
+    Contest contest = 2;
+}
+
+message UpdateContestResponse {
+    Contest contest = 1;
+    base.BaseResponse base_response = 2;
+}
+
+message AddContestProblemRequest {
+    uint64 contest_id = 1;
+    uint64 problem_id = 2;
+}
+
+message AddContestProblemResponse {
+    base.BaseResponse base_response = 1;
+}
+
+message DeleteContestProblemRequest {
+    uint64 contest_id = 1;
+    uint64 problem_id = 2;
+}
+
+message DeleteContestProblemResponse {
+    base.BaseResponse base_response = 1;
+}
+
+message DeleteContestAdminRequest {
+    uint64 contest_id = 1;
+    uint64 user_id = 2;
+}
+
+message DeleteContestAdminResponse {
+    base.BaseResponse base_response = 1;
 }
 
 message ListProblemsRequest {

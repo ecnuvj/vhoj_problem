@@ -29,6 +29,10 @@ type ProblemServiceClient interface {
 	AddContestAdmin(ctx context.Context, in *AddContestAdminRequest, opts ...grpc.CallOption) (*AddContestAdminResponse, error)
 	GetContestAdmins(ctx context.Context, in *GetContestAdminsRequest, opts ...grpc.CallOption) (*GetContestAdminsResponse, error)
 	GetContestParticipants(ctx context.Context, in *GetContestParticipantsRequest, opts ...grpc.CallOption) (*GetContestParticipantsResponse, error)
+	AddContestProblem(ctx context.Context, in *AddContestProblemRequest, opts ...grpc.CallOption) (*AddContestProblemResponse, error)
+	DeleteContestProblem(ctx context.Context, in *DeleteContestProblemRequest, opts ...grpc.CallOption) (*DeleteContestProblemResponse, error)
+	DeleteContestAdmin(ctx context.Context, in *DeleteContestAdminRequest, opts ...grpc.CallOption) (*DeleteContestAdminResponse, error)
+	UpdateContest(ctx context.Context, in *UpdateContestRequest, opts ...grpc.CallOption) (*UpdateContestResponse, error)
 }
 
 type problemServiceClient struct {
@@ -147,6 +151,42 @@ func (c *problemServiceClient) GetContestParticipants(ctx context.Context, in *G
 	return out, nil
 }
 
+func (c *problemServiceClient) AddContestProblem(ctx context.Context, in *AddContestProblemRequest, opts ...grpc.CallOption) (*AddContestProblemResponse, error) {
+	out := new(AddContestProblemResponse)
+	err := c.cc.Invoke(ctx, "/sdk.ProblemService/AddContestProblem", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *problemServiceClient) DeleteContestProblem(ctx context.Context, in *DeleteContestProblemRequest, opts ...grpc.CallOption) (*DeleteContestProblemResponse, error) {
+	out := new(DeleteContestProblemResponse)
+	err := c.cc.Invoke(ctx, "/sdk.ProblemService/DeleteContestProblem", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *problemServiceClient) DeleteContestAdmin(ctx context.Context, in *DeleteContestAdminRequest, opts ...grpc.CallOption) (*DeleteContestAdminResponse, error) {
+	out := new(DeleteContestAdminResponse)
+	err := c.cc.Invoke(ctx, "/sdk.ProblemService/DeleteContestAdmin", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *problemServiceClient) UpdateContest(ctx context.Context, in *UpdateContestRequest, opts ...grpc.CallOption) (*UpdateContestResponse, error) {
+	out := new(UpdateContestResponse)
+	err := c.cc.Invoke(ctx, "/sdk.ProblemService/UpdateContest", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // ProblemServiceServer is the server API for ProblemService service.
 // All implementations must embed UnimplementedProblemServiceServer
 // for forward compatibility
@@ -163,6 +203,10 @@ type ProblemServiceServer interface {
 	AddContestAdmin(context.Context, *AddContestAdminRequest) (*AddContestAdminResponse, error)
 	GetContestAdmins(context.Context, *GetContestAdminsRequest) (*GetContestAdminsResponse, error)
 	GetContestParticipants(context.Context, *GetContestParticipantsRequest) (*GetContestParticipantsResponse, error)
+	AddContestProblem(context.Context, *AddContestProblemRequest) (*AddContestProblemResponse, error)
+	DeleteContestProblem(context.Context, *DeleteContestProblemRequest) (*DeleteContestProblemResponse, error)
+	DeleteContestAdmin(context.Context, *DeleteContestAdminRequest) (*DeleteContestAdminResponse, error)
+	UpdateContest(context.Context, *UpdateContestRequest) (*UpdateContestResponse, error)
 	mustEmbedUnimplementedProblemServiceServer()
 }
 
@@ -205,6 +249,18 @@ func (UnimplementedProblemServiceServer) GetContestAdmins(context.Context, *GetC
 }
 func (UnimplementedProblemServiceServer) GetContestParticipants(context.Context, *GetContestParticipantsRequest) (*GetContestParticipantsResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetContestParticipants not implemented")
+}
+func (UnimplementedProblemServiceServer) AddContestProblem(context.Context, *AddContestProblemRequest) (*AddContestProblemResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method AddContestProblem not implemented")
+}
+func (UnimplementedProblemServiceServer) DeleteContestProblem(context.Context, *DeleteContestProblemRequest) (*DeleteContestProblemResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method DeleteContestProblem not implemented")
+}
+func (UnimplementedProblemServiceServer) DeleteContestAdmin(context.Context, *DeleteContestAdminRequest) (*DeleteContestAdminResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method DeleteContestAdmin not implemented")
+}
+func (UnimplementedProblemServiceServer) UpdateContest(context.Context, *UpdateContestRequest) (*UpdateContestResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method UpdateContest not implemented")
 }
 func (UnimplementedProblemServiceServer) mustEmbedUnimplementedProblemServiceServer() {}
 
@@ -435,6 +491,78 @@ func _ProblemService_GetContestParticipants_Handler(srv interface{}, ctx context
 	return interceptor(ctx, in, info, handler)
 }
 
+func _ProblemService_AddContestProblem_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(AddContestProblemRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ProblemServiceServer).AddContestProblem(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/sdk.ProblemService/AddContestProblem",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ProblemServiceServer).AddContestProblem(ctx, req.(*AddContestProblemRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _ProblemService_DeleteContestProblem_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(DeleteContestProblemRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ProblemServiceServer).DeleteContestProblem(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/sdk.ProblemService/DeleteContestProblem",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ProblemServiceServer).DeleteContestProblem(ctx, req.(*DeleteContestProblemRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _ProblemService_DeleteContestAdmin_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(DeleteContestAdminRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ProblemServiceServer).DeleteContestAdmin(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/sdk.ProblemService/DeleteContestAdmin",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ProblemServiceServer).DeleteContestAdmin(ctx, req.(*DeleteContestAdminRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _ProblemService_UpdateContest_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(UpdateContestRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ProblemServiceServer).UpdateContest(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/sdk.ProblemService/UpdateContest",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ProblemServiceServer).UpdateContest(ctx, req.(*UpdateContestRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 var _ProblemService_serviceDesc = grpc.ServiceDesc{
 	ServiceName: "sdk.ProblemService",
 	HandlerType: (*ProblemServiceServer)(nil),
@@ -486,6 +614,22 @@ var _ProblemService_serviceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "GetContestParticipants",
 			Handler:    _ProblemService_GetContestParticipants_Handler,
+		},
+		{
+			MethodName: "AddContestProblem",
+			Handler:    _ProblemService_AddContestProblem_Handler,
+		},
+		{
+			MethodName: "DeleteContestProblem",
+			Handler:    _ProblemService_DeleteContestProblem_Handler,
+		},
+		{
+			MethodName: "DeleteContestAdmin",
+			Handler:    _ProblemService_DeleteContestAdmin_Handler,
+		},
+		{
+			MethodName: "UpdateContest",
+			Handler:    _ProblemService_UpdateContest_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

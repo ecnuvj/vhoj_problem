@@ -4,7 +4,6 @@ import (
 	"context"
 	"github.com/ecnuvj/vhoj_db/pkg/dao/mapper/contest_mapper"
 	"github.com/ecnuvj/vhoj_db/pkg/dao/mapper/problem_mapper"
-	"github.com/ecnuvj/vhoj_db/pkg/dao/model"
 	"github.com/ecnuvj/vhoj_problem/pkg/adapter"
 	"github.com/ecnuvj/vhoj_problem/pkg/common"
 	"github.com/ecnuvj/vhoj_problem/pkg/sdk/problempb"
@@ -57,19 +56,7 @@ func (ProblemService) SearchProblem(condition *common.ProblemSearchCondition, pa
 }
 
 func (ProblemService) CreateContest(contest *problempb.Contest) (*problempb.Contest, error) {
-	problemIds := make([]uint, len(contest.ProblemIds))
-	for i, p := range contest.ProblemIds {
-		problemIds[i] = uint(p)
-	}
-	modelContest := &model.Contest{
-		Title:       contest.Title,
-		Description: contest.Description,
-		UserId:      uint(contest.Creator.UserId),
-		ProblemNum:  int64(len(contest.ProblemIds)),
-		ProblemIds:  problemIds,
-		StartTime:   contest.StartTime.AsTime(),
-		EndTime:     contest.EndTime.AsTime(),
-	}
+	modelContest := adapter.RpcContestToModelContest(contest)
 	retContest, err := contest_mapper.ContestMapper.CreateContest(modelContest)
 	if err != nil {
 		return nil, err
@@ -189,4 +176,36 @@ func (ProblemService) GetContestParticipants(contestId uint) ([]*userpb.User, er
 		return nil, err
 	}
 	return resp.Users, nil
+}
+
+func (ProblemService) AddContestProblem(contestId uint, problemId uint) error {
+	err := contest_mapper.ContestMapper.AddContestProblem(contestId, problemId)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+func (ProblemService) DeleteContestProblem(contestId uint, problemId uint) error {
+	err := contest_mapper.ContestMapper.DeleteContestProblem(contestId, problemId)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+func (ProblemService) DeleteContestAdmin(contestId uint, userId uint) error {
+	err := contest_mapper.ContestMapper.DeleteContestAdmin(contestId, userId)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+func (ProblemService) UpdateContest(contest *problempb.Contest) (*problempb.Contest, error) {
+	retContest, err := contest_mapper.ContestMapper.UpdateContest(adapter.RpcContestToModelContest(contest))
+	if err != nil {
+		return nil, err
+	}
+	return adapter.ModelContestToRpcContest(retContest), nil
 }

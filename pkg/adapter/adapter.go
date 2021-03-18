@@ -5,10 +5,11 @@ import (
 	"github.com/ecnuvj/vhoj_problem/pkg/sdk/problempb"
 	"github.com/ecnuvj/vhoj_rpc/model/userpb"
 	"github.com/golang/protobuf/ptypes"
+	"github.com/jinzhu/gorm"
 )
 
 func ModelProblemToRpcProblem(problem *model.Problem) *problempb.Problem {
-	if problem.RawProblem == nil {
+	if problem == nil || problem.RawProblem == nil {
 		return &problempb.Problem{}
 	}
 	return &problempb.Problem{
@@ -35,12 +36,12 @@ func ModelProblemsToRpcProblems(problems []*model.Problem) []*problempb.Problem 
 }
 
 func ModelContestToRpcContest(contest *model.Contest) *problempb.Contest {
+	if contest == nil {
+		return &problempb.Contest{}
+	}
 	startTime, _ := ptypes.TimestampProto(contest.StartTime)
 	endTime, _ := ptypes.TimestampProto(contest.EndTime)
-	problemIds := make([]uint64, len(contest.ProblemIds))
-	for i, p := range contest.ProblemIds {
-		problemIds[i] = uint64(p)
-	}
+	problemIds := UintsToUint64s(contest.ProblemIds)
 	return &problempb.Contest{
 		ContestId:   uint64(contest.ID),
 		Title:       contest.Title,
@@ -52,7 +53,26 @@ func ModelContestToRpcContest(contest *model.Contest) *problempb.Contest {
 	}
 }
 
+func RpcContestToModelContest(contest *problempb.Contest) *model.Contest {
+	if contest == nil {
+		return &model.Contest{}
+	}
+	return &model.Contest{
+		Model:       gorm.Model{ID: uint(contest.ContestId)},
+		Title:       contest.Title,
+		Description: contest.Description,
+		UserId:      uint(contest.Creator.UserId),
+		User:        RpcUserToModelUser(contest.Creator),
+		ProblemIds:  Uint64sToUints(contest.ProblemIds),
+		StartTime:   contest.StartTime.AsTime(),
+		EndTime:     contest.EndTime.AsTime(),
+	}
+}
+
 func ModelUserToRpcUser(user *model.User) *userpb.User {
+	if user == nil {
+		return &userpb.User{}
+	}
 	var userAuthId uint64
 	var password string
 	if user.UserAuth != nil {
@@ -72,11 +92,45 @@ func ModelUserToRpcUser(user *model.User) *userpb.User {
 	}
 }
 
+func RpcUserToModelUser(user *userpb.User) *model.User {
+	if user == nil {
+		return &model.User{}
+	}
+	roles := RpcRolesToModelRoles(user.Roles)
+	userAuth := &model.UserAuth{
+		Model:    gorm.Model{ID: uint(user.UserAuthId)},
+		Password: user.Password,
+	}
+	return &model.User{
+		Model: gorm.Model{
+			ID: uint(user.UserId),
+		},
+		UserAuth:  userAuth,
+		Email:     user.Email,
+		Nickname:  user.Username,
+		School:    user.School,
+		Roles:     roles,
+		Submitted: user.Submitted,
+		Accepted:  user.Accepted,
+	}
+}
+
 func ModelRolesToRpcRoles(roles []*model.Role) []*userpb.Role {
 	retRoles := make([]*userpb.Role, len(roles))
 	for i, r := range roles {
 		retRoles[i] = &userpb.Role{
 			RoleId:   uint64(r.ID),
+			RoleName: r.RoleName,
+		}
+	}
+	return retRoles
+}
+
+func RpcRolesToModelRoles(roles []*userpb.Role) []*model.Role {
+	retRoles := make([]*model.Role, len(roles))
+	for i, r := range roles {
+		retRoles[i] = &model.Role{
+			Model:    gorm.Model{ID: uint(r.RoleId)},
 			RoleName: r.RoleName,
 		}
 	}
@@ -91,7 +145,7 @@ func UintsToUint64s(ids []uint) []uint64 {
 	return ret
 }
 
-func Uint64sToUints(ids []int64) []uint {
+func Uint64sToUints(ids []uint64) []uint {
 	ret := make([]uint, len(ids))
 	for i, id := range ids {
 		ret[i] = uint(id)
