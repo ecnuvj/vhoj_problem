@@ -152,3 +152,41 @@ func Uint64sToUints(ids []uint64) []uint {
 	}
 	return ret
 }
+
+func RpcContestProblemToModelContestProblem(problem *problempb.ContestProblem) *model.ContestProblem {
+	return &model.ContestProblem{
+		ContestId:    uint(problem.ContestId),
+		ProblemOrder: problem.ProblemOrder,
+		ProblemId:    uint(problem.ProblemId),
+		Title:        problem.Title,
+		Accepted:     uint(problem.Accepted),
+		Submitted:    uint(problem.Submitted),
+	}
+}
+
+func RpcContestProblemsToModelContestProblems(problems []*problempb.ContestProblem) []*model.ContestProblem {
+	retProblems := make([]*model.ContestProblem, len(problems))
+	for i, p := range problems {
+		retProblems[i] = RpcContestProblemToModelContestProblem(p)
+	}
+	return retProblems
+}
+
+func ModelContestProblemToRpcContestProblem(problem *model.ContestProblem) *problempb.ContestProblem {
+	return &problempb.ContestProblem{
+		ContestId:    uint64(problem.ContestId),
+		ProblemId:    uint64(problem.ProblemId),
+		ProblemOrder: problem.ProblemOrder,
+		Title:        problem.Title,
+		Accepted:     uint64(problem.Accepted),
+		Submitted:    uint64(problem.Submitted),
+	}
+}
+
+func ModelContestProblemsToRpcContestProblems(problems []*model.ContestProblem) []*problempb.ContestProblem {
+	retProblems := make([]*problempb.ContestProblem, len(problems))
+	for i, p := range problems {
+		retProblems[i] = ModelContestProblemToRpcContestProblem(p)
+	}
+	return retProblems
+}

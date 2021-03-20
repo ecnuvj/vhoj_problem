@@ -33,6 +33,8 @@ type ProblemServiceClient interface {
 	DeleteContestProblem(ctx context.Context, in *DeleteContestProblemRequest, opts ...grpc.CallOption) (*DeleteContestProblemResponse, error)
 	DeleteContestAdmin(ctx context.Context, in *DeleteContestAdminRequest, opts ...grpc.CallOption) (*DeleteContestAdminResponse, error)
 	UpdateContest(ctx context.Context, in *UpdateContestRequest, opts ...grpc.CallOption) (*UpdateContestResponse, error)
+	UpdateContestProblems(ctx context.Context, in *UpdateContestProblemsRequest, opts ...grpc.CallOption) (*UpdateContestProblemsResponse, error)
+	GetContestProblems(ctx context.Context, in *GetContestProblemsRequest, opts ...grpc.CallOption) (*GetContestProblemsResponse, error)
 }
 
 type problemServiceClient struct {
@@ -187,6 +189,24 @@ func (c *problemServiceClient) UpdateContest(ctx context.Context, in *UpdateCont
 	return out, nil
 }
 
+func (c *problemServiceClient) UpdateContestProblems(ctx context.Context, in *UpdateContestProblemsRequest, opts ...grpc.CallOption) (*UpdateContestProblemsResponse, error) {
+	out := new(UpdateContestProblemsResponse)
+	err := c.cc.Invoke(ctx, "/sdk.ProblemService/UpdateContestProblems", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *problemServiceClient) GetContestProblems(ctx context.Context, in *GetContestProblemsRequest, opts ...grpc.CallOption) (*GetContestProblemsResponse, error) {
+	out := new(GetContestProblemsResponse)
+	err := c.cc.Invoke(ctx, "/sdk.ProblemService/GetContestProblems", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // ProblemServiceServer is the server API for ProblemService service.
 // All implementations must embed UnimplementedProblemServiceServer
 // for forward compatibility
@@ -207,6 +227,8 @@ type ProblemServiceServer interface {
 	DeleteContestProblem(context.Context, *DeleteContestProblemRequest) (*DeleteContestProblemResponse, error)
 	DeleteContestAdmin(context.Context, *DeleteContestAdminRequest) (*DeleteContestAdminResponse, error)
 	UpdateContest(context.Context, *UpdateContestRequest) (*UpdateContestResponse, error)
+	UpdateContestProblems(context.Context, *UpdateContestProblemsRequest) (*UpdateContestProblemsResponse, error)
+	GetContestProblems(context.Context, *GetContestProblemsRequest) (*GetContestProblemsResponse, error)
 	mustEmbedUnimplementedProblemServiceServer()
 }
 
@@ -261,6 +283,12 @@ func (UnimplementedProblemServiceServer) DeleteContestAdmin(context.Context, *De
 }
 func (UnimplementedProblemServiceServer) UpdateContest(context.Context, *UpdateContestRequest) (*UpdateContestResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method UpdateContest not implemented")
+}
+func (UnimplementedProblemServiceServer) UpdateContestProblems(context.Context, *UpdateContestProblemsRequest) (*UpdateContestProblemsResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method UpdateContestProblems not implemented")
+}
+func (UnimplementedProblemServiceServer) GetContestProblems(context.Context, *GetContestProblemsRequest) (*GetContestProblemsResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetContestProblems not implemented")
 }
 func (UnimplementedProblemServiceServer) mustEmbedUnimplementedProblemServiceServer() {}
 
@@ -563,6 +591,42 @@ func _ProblemService_UpdateContest_Handler(srv interface{}, ctx context.Context,
 	return interceptor(ctx, in, info, handler)
 }
 
+func _ProblemService_UpdateContestProblems_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(UpdateContestProblemsRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ProblemServiceServer).UpdateContestProblems(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/sdk.ProblemService/UpdateContestProblems",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ProblemServiceServer).UpdateContestProblems(ctx, req.(*UpdateContestProblemsRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _ProblemService_GetContestProblems_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetContestProblemsRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ProblemServiceServer).GetContestProblems(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/sdk.ProblemService/GetContestProblems",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ProblemServiceServer).GetContestProblems(ctx, req.(*GetContestProblemsRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 var _ProblemService_serviceDesc = grpc.ServiceDesc{
 	ServiceName: "sdk.ProblemService",
 	HandlerType: (*ProblemServiceServer)(nil),
@@ -630,6 +694,14 @@ var _ProblemService_serviceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "UpdateContest",
 			Handler:    _ProblemService_UpdateContest_Handler,
+		},
+		{
+			MethodName: "UpdateContestProblems",
+			Handler:    _ProblemService_UpdateContestProblems_Handler,
+		},
+		{
+			MethodName: "GetContestProblems",
+			Handler:    _ProblemService_GetContestProblems_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

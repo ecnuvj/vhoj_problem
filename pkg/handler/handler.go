@@ -90,7 +90,7 @@ func (p *ProblemHandler) CreateContest(ctx context.Context, request *problempb.C
 			BaseResponse: util.PbReplyf(base.REPLY_STATUS_FAILURE, "create contest request is nil"),
 		}, fmt.Errorf("create contest request is nil")
 	}
-	contest, err := p.ProblemService.CreateContest(request.Contest)
+	contest, err := p.ProblemService.CreateContest(request.Contest, request.ContestProblems)
 	if err != nil {
 		return &problempb.CreateContestResponse{
 			BaseResponse: util.PbReplyf(base.REPLY_STATUS_FAILURE, "service error: %v", err),
@@ -319,5 +319,42 @@ func (p *ProblemHandler) UpdateContest(ctx context.Context, request *problempb.U
 	return &problempb.UpdateContestResponse{
 		Contest:      contest,
 		BaseResponse: util.PbReplyf(base.REPLY_STATUS_SUCCESS, "success"),
+	}, nil
+}
+
+func (p *ProblemHandler) UpdateContestProblems(ctx context.Context, request *problempb.UpdateContestProblemsRequest) (*problempb.UpdateContestProblemsResponse, error) {
+	if request == nil {
+		return &problempb.UpdateContestProblemsResponse{
+			BaseResponse: util.PbReplyf(base.REPLY_STATUS_FAILURE, "request is nil"),
+		}, fmt.Errorf("request is nil")
+	}
+	problems, err := p.ProblemService.UpdateContestProblems(uint(request.ContestId), request.ContestProblems)
+	if err != nil {
+		return &problempb.UpdateContestProblemsResponse{
+			BaseResponse: util.PbReplyf(base.REPLY_STATUS_FAILURE, "service error: %v", err),
+		}, fmt.Errorf("service error: %v", err)
+	}
+	return &problempb.UpdateContestProblemsResponse{
+		ContestProblems: problems,
+		BaseResponse:    util.PbReplyf(base.REPLY_STATUS_SUCCESS, "success"),
+	}, nil
+}
+
+//获取比赛题目order和id
+func (p *ProblemHandler) GetContestProblems(ctx context.Context, request *problempb.GetContestProblemsRequest) (*problempb.GetContestProblemsResponse, error) {
+	if request == nil {
+		return &problempb.GetContestProblemsResponse{
+			BaseResponse: util.PbReplyf(base.REPLY_STATUS_FAILURE, "request is nil"),
+		}, fmt.Errorf("request is nil")
+	}
+	problems, err := p.ProblemService.GetContestProblems(uint(request.ContestId))
+	if err != nil {
+		return &problempb.GetContestProblemsResponse{
+			BaseResponse: util.PbReplyf(base.REPLY_STATUS_FAILURE, "service error: %v", err),
+		}, fmt.Errorf("service error: %v", err)
+	}
+	return &problempb.GetContestProblemsResponse{
+		ContestProblems: problems,
+		BaseResponse:    util.PbReplyf(base.REPLY_STATUS_SUCCESS, "success"),
 	}, nil
 }

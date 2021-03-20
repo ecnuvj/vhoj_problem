@@ -5,7 +5,7 @@ option go_package = "github.com/ecnuvj/vhoj_problem/pkg/sdk/problempb";
 package sdk;
 
 import "include/userpb/user.proto";
-import "problempb/problem.proto";
+import "problempb/contest_problem.proto";
 import "include/google/protobuf/timestamp.proto";
 
 message Contest {
@@ -16,5 +16,5 @@ message Contest {
     google.protobuf.Timestamp end_time = 5;
     User creator = 6;
     repeated uint64 problem_ids = 7;
-    repeated Problem problems = 8;
+    repeated ContestProblem problems = 8;
 }

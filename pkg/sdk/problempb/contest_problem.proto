@@ -1,0 +1,15 @@
+syntax = "proto3";
+
+option go_package = "github.com/ecnuvj/vhoj_problem/pkg/sdk/problempb";
+
+package sdk;
+
+message ContestProblem {
+  uint64 contest_id = 1;
+  uint64 problem_id = 2;
+  string problem_order = 3;
+  string title = 4;
+  uint64 submitted = 5;
+  uint64 accepted = 6;
+}
+

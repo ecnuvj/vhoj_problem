@@ -7,6 +7,7 @@ package sdk;
 import "base/base.proto";
 import "problempb/contest.proto";
 import "problempb/problem.proto";
+import "problempb/contest_problem.proto";
 import "include/userpb/user.proto";
 
 service ProblemService {
@@ -26,6 +27,27 @@ service ProblemService {
     rpc DeleteContestProblem(DeleteContestProblemRequest) returns(DeleteContestProblemResponse) {};
     rpc DeleteContestAdmin(DeleteContestAdminRequest) returns(DeleteContestAdminResponse) {};
     rpc UpdateContest(UpdateContestRequest) returns(UpdateContestResponse) {};
+    rpc UpdateContestProblems(UpdateContestProblemsRequest) returns(UpdateContestProblemsResponse) {};
+    rpc GetContestProblems(GetContestProblemsRequest) returns(GetContestProblemsResponse) {};
+}
+
+message GetContestProblemsRequest {
+    uint64 contest_id = 1;
+}
+
+message GetContestProblemsResponse {
+    repeated ContestProblem contest_problems = 1;
+    base.BaseResponse base_response = 2;
+}
+
+message UpdateContestProblemsRequest {
+    uint64 contest_id = 1;
+    repeated ContestProblem contest_problems = 2;
+}
+
+message UpdateContestProblemsResponse {
+    repeated ContestProblem contest_problems = 1;
+    base.BaseResponse base_response = 2;
 }
 
 message UpdateContestRequest {
@@ -103,6 +125,7 @@ message SearchProblemByConditionResponse {
 
 message CreateContestRequest {
     Contest contest = 1;
+    repeated ContestProblem contest_problems = 2;
 }
 
 message CreateContestResponse {

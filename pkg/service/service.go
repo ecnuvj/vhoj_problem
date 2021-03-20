@@ -55,13 +55,19 @@ func (ProblemService) SearchProblem(condition *common.ProblemSearchCondition, pa
 	}, nil
 }
 
-func (ProblemService) CreateContest(contest *problempb.Contest) (*problempb.Contest, error) {
+func (ProblemService) CreateContest(contest *problempb.Contest, contestProblems []*problempb.ContestProblem) (*problempb.Contest, error) {
 	modelContest := adapter.RpcContestToModelContest(contest)
-	retContest, err := contest_mapper.ContestMapper.CreateContest(modelContest)
+	problems := adapter.RpcContestProblemsToModelContestProblems(contestProblems)
+	retContest, err := contest_mapper.ContestMapper.CreateContest(modelContest, problems)
 	if err != nil {
 		return nil, err
 	}
-	return adapter.ModelContestToRpcContest(retContest), nil
+	retRpcContest := adapter.ModelContestToRpcContest(retContest)
+	for i, _ := range contestProblems {
+		contestProblems[i].ContestId = retRpcContest.ContestId
+	}
+	retRpcContest.Problems = contestProblems
+	return retRpcContest, nil
 }
 
 func (ProblemService) ListContests(pageNo int32, pageSize int32) ([]*problempb.Contest, *common.PageInfo, error) {
@@ -104,8 +110,9 @@ func (ProblemService) GetContest(contestId uint) (*problempb.Contest, error) {
 		return nil, err
 	}
 	rpcContest := adapter.ModelContestToRpcContest(contest)
-	problems, _ := problem_mapper.ProblemMapper.FindProblemsByIds(contest.ProblemIds)
-	rpcContest.Problems = adapter.ModelProblemsToRpcProblems(problems)
+	//返回
+	problems, _ := contest_mapper.ContestMapper.FindContestProblems(contestId)
+	rpcContest.Problems = adapter.ModelContestProblemsToRpcContestProblems(problems)
 	return rpcContest, nil
 }
 
@@ -208,4 +215,20 @@ func (ProblemService) UpdateContest(contest *problempb.Contest) (*problempb.Cont
 		return nil, err
 	}
 	return adapter.ModelContestToRpcContest(retContest), nil
+}
+
+func (ProblemService) UpdateContestProblems(contestId uint, problems []*problempb.ContestProblem) ([]*problempb.ContestProblem, error) {
+	retProblems, err := contest_mapper.ContestMapper.UpdateContestProblems(contestId, adapter.RpcContestProblemsToModelContestProblems(problems))
+	if err != nil {
+		return nil, err
+	}
+	return adapter.ModelContestProblemsToRpcContestProblems(retProblems), nil
+}
+
+func (ProblemService) GetContestProblems(contestId uint) ([]*problempb.ContestProblem, error) {
+	problems, err := contest_mapper.ContestMapper.FindContestProblems(contestId)
+	if err != nil {
+		return nil, err
+	}
+	return adapter.ModelContestProblemsToRpcContestProblems(problems), nil
 }
