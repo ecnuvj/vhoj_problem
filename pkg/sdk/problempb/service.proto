@@ -29,6 +29,20 @@ service ProblemService {
     rpc UpdateContest(UpdateContestRequest) returns(UpdateContestResponse) {};
     rpc UpdateContestProblems(UpdateContestProblemsRequest) returns(UpdateContestProblemsResponse) {};
     rpc GetContestProblems(GetContestProblemsRequest) returns(GetContestProblemsResponse) {};
+    rpc GetUserContests(GetUserContestsRequest) returns(GetUserContestsResponse) {};
+}
+
+message GetUserContestsRequest{
+    uint64 user_id = 1;
+    int32 page_no = 2;
+    int32 page_size = 3;
+}
+
+message GetUserContestsResponse {
+    repeated Contest contests = 1;
+    int32 total_pages = 2;
+    int32 total_count = 3;
+    base.BaseResponse base_response = 4;
 }
 
 message GetContestProblemsRequest {

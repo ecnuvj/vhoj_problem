@@ -53,6 +53,14 @@ func ModelContestToRpcContest(contest *model.Contest) *problempb.Contest {
 	}
 }
 
+func ModelContestsToRpcContests(contests []*model.Contest) []*problempb.Contest {
+	retContests := make([]*problempb.Contest, len(contests))
+	for i, c := range contests {
+		retContests[i] = ModelContestToRpcContest(c)
+	}
+	return retContests
+}
+
 func RpcContestToModelContest(contest *problempb.Contest) *model.Contest {
 	if contest == nil {
 		return &model.Contest{}

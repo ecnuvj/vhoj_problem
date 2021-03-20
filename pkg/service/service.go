@@ -232,3 +232,14 @@ func (ProblemService) GetContestProblems(contestId uint) ([]*problempb.ContestPr
 	}
 	return adapter.ModelContestProblemsToRpcContestProblems(problems), nil
 }
+
+func (ProblemService) GetUserContests(userId uint, pageNo int32, pageSize int32) ([]*problempb.Contest, *common.PageInfo, error) {
+	contests, count, err := contest_mapper.ContestMapper.FindUserContests(userId, pageNo, pageSize)
+	if err != nil {
+		return nil, nil, err
+	}
+	return adapter.ModelContestsToRpcContests(contests), &common.PageInfo{
+		TotalPages: (count + pageSize - 1) / pageSize,
+		TotalCount: count,
+	}, nil
+}

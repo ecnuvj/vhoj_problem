@@ -358,3 +358,23 @@ func (p *ProblemHandler) GetContestProblems(ctx context.Context, request *proble
 		BaseResponse:    util.PbReplyf(base.REPLY_STATUS_SUCCESS, "success"),
 	}, nil
 }
+
+func (p *ProblemHandler) GetUserContests(ctx context.Context, request *problempb.GetUserContestsRequest) (*problempb.GetUserContestsResponse, error) {
+	if request == nil {
+		return &problempb.GetUserContestsResponse{
+			BaseResponse: util.PbReplyf(base.REPLY_STATUS_FAILURE, "request is nil"),
+		}, fmt.Errorf("request is nil")
+	}
+	contests, pageInfo, err := p.ProblemService.GetUserContests(uint(request.UserId), request.PageNo, request.PageSize)
+	if err != nil {
+		return &problempb.GetUserContestsResponse{
+			BaseResponse: util.PbReplyf(base.REPLY_STATUS_FAILURE, "service error: %v", err),
+		}, fmt.Errorf("service error: %v", err)
+	}
+	return &problempb.GetUserContestsResponse{
+		Contests:     contests,
+		TotalPages:   pageInfo.TotalPages,
+		TotalCount:   pageInfo.TotalCount,
+		BaseResponse: util.PbReplyf(base.REPLY_STATUS_SUCCESS, "success"),
+	}, nil
+}
