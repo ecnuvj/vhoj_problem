@@ -30,6 +30,16 @@ service ProblemService {
     rpc UpdateContestProblems(UpdateContestProblemsRequest) returns(UpdateContestProblemsResponse) {};
     rpc GetContestProblems(GetContestProblemsRequest) returns(GetContestProblemsResponse) {};
     rpc GetUserContests(GetUserContestsRequest) returns(GetUserContestsResponse) {};
+    rpc RandProblem(RandProblemRequest) returns(RandProblemResponse) {};
+}
+
+message RandProblemRequest {
+
+}
+
+message RandProblemResponse {
+    uint64 problem_id = 1;
+    base.BaseResponse base_response = 2;
 }
 
 message GetUserContestsRequest{

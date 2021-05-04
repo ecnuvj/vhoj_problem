@@ -378,3 +378,21 @@ func (p *ProblemHandler) GetUserContests(ctx context.Context, request *problempb
 		BaseResponse: util.PbReplyf(base.REPLY_STATUS_SUCCESS, "success"),
 	}, nil
 }
+
+func (p *ProblemHandler) RandProblem(ctx context.Context, request *problempb.RandProblemRequest) (*problempb.RandProblemResponse, error) {
+	if request == nil {
+		return &problempb.RandProblemResponse{
+			BaseResponse: util.PbReplyf(base.REPLY_STATUS_FAILURE, "request is nil"),
+		}, fmt.Errorf("request is nil")
+	}
+	problemId, err := p.ProblemService.RandProblem()
+	if err != nil {
+		return &problempb.RandProblemResponse{
+			BaseResponse: util.PbReplyf(base.REPLY_STATUS_FAILURE, "service error: %v", err),
+		}, fmt.Errorf("service error: %v", err)
+	}
+	return &problempb.RandProblemResponse{
+		ProblemId:    uint64(problemId),
+		BaseResponse: util.PbReplyf(base.REPLY_STATUS_SUCCESS, "success"),
+	}, nil
+}

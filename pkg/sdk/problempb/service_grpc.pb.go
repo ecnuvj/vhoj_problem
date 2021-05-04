@@ -36,6 +36,7 @@ type ProblemServiceClient interface {
 	UpdateContestProblems(ctx context.Context, in *UpdateContestProblemsRequest, opts ...grpc.CallOption) (*UpdateContestProblemsResponse, error)
 	GetContestProblems(ctx context.Context, in *GetContestProblemsRequest, opts ...grpc.CallOption) (*GetContestProblemsResponse, error)
 	GetUserContests(ctx context.Context, in *GetUserContestsRequest, opts ...grpc.CallOption) (*GetUserContestsResponse, error)
+	RandProblem(ctx context.Context, in *RandProblemRequest, opts ...grpc.CallOption) (*RandProblemResponse, error)
 }
 
 type problemServiceClient struct {
@@ -217,6 +218,15 @@ func (c *problemServiceClient) GetUserContests(ctx context.Context, in *GetUserC
 	return out, nil
 }
 
+func (c *problemServiceClient) RandProblem(ctx context.Context, in *RandProblemRequest, opts ...grpc.CallOption) (*RandProblemResponse, error) {
+	out := new(RandProblemResponse)
+	err := c.cc.Invoke(ctx, "/sdk.ProblemService/RandProblem", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // ProblemServiceServer is the server API for ProblemService service.
 // All implementations must embed UnimplementedProblemServiceServer
 // for forward compatibility
@@ -240,6 +250,7 @@ type ProblemServiceServer interface {
 	UpdateContestProblems(context.Context, *UpdateContestProblemsRequest) (*UpdateContestProblemsResponse, error)
 	GetContestProblems(context.Context, *GetContestProblemsRequest) (*GetContestProblemsResponse, error)
 	GetUserContests(context.Context, *GetUserContestsRequest) (*GetUserContestsResponse, error)
+	RandProblem(context.Context, *RandProblemRequest) (*RandProblemResponse, error)
 	mustEmbedUnimplementedProblemServiceServer()
 }
 
@@ -303,6 +314,9 @@ func (UnimplementedProblemServiceServer) GetContestProblems(context.Context, *Ge
 }
 func (UnimplementedProblemServiceServer) GetUserContests(context.Context, *GetUserContestsRequest) (*GetUserContestsResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetUserContests not implemented")
+}
+func (UnimplementedProblemServiceServer) RandProblem(context.Context, *RandProblemRequest) (*RandProblemResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method RandProblem not implemented")
 }
 func (UnimplementedProblemServiceServer) mustEmbedUnimplementedProblemServiceServer() {}
 
@@ -659,6 +673,24 @@ func _ProblemService_GetUserContests_Handler(srv interface{}, ctx context.Contex
 	return interceptor(ctx, in, info, handler)
 }
 
+func _ProblemService_RandProblem_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(RandProblemRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ProblemServiceServer).RandProblem(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/sdk.ProblemService/RandProblem",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ProblemServiceServer).RandProblem(ctx, req.(*RandProblemRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 var _ProblemService_serviceDesc = grpc.ServiceDesc{
 	ServiceName: "sdk.ProblemService",
 	HandlerType: (*ProblemServiceServer)(nil),
@@ -738,6 +770,10 @@ var _ProblemService_serviceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "GetUserContests",
 			Handler:    _ProblemService_GetUserContests_Handler,
+		},
+		{
+			MethodName: "RandProblem",
+			Handler:    _ProblemService_RandProblem_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

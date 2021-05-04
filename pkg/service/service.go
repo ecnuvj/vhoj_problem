@@ -243,3 +243,11 @@ func (ProblemService) GetUserContests(userId uint, pageNo int32, pageSize int32)
 		TotalCount: count,
 	}, nil
 }
+
+func (ProblemService) RandProblem() (uint, error) {
+	problem, err := problem_mapper.ProblemMapper.FindProblemByRandom()
+	if err != nil {
+		return 0, err
+	}
+	return problem.ID, nil
+}
