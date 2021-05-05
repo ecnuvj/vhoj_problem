@@ -8,6 +8,6 @@ import (
 
 func Init() {
 	database.Init()
-	rpc_service.Init()
 	rpc_client.Init()
+	rpc_service.Init()
 }

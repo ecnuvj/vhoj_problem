@@ -1,6 +1,7 @@
 package adapter
 
 import (
+	"github.com/ecnuvj/vhoj_common/pkg/common/constants/remote_oj"
 	"github.com/ecnuvj/vhoj_db/pkg/dao/model"
 	"github.com/ecnuvj/vhoj_problem/pkg/sdk/problempb"
 	"github.com/ecnuvj/vhoj_rpc/model/userpb"
@@ -197,4 +198,36 @@ func ModelContestProblemsToRpcContestProblems(problems []*model.ContestProblem) 
 		retProblems[i] = ModelContestProblemToRpcContestProblem(p)
 	}
 	return retProblems
+}
+
+func ModelProblemsToRpcRawProblems(problems []*model.Problem) []*problempb.RawProblem {
+	rawProblems := make([]*problempb.RawProblem, len(problems))
+	for i, p := range problems {
+		if p.RawProblem == nil {
+			continue
+		}
+		updatedAt, _ := ptypes.TimestampProto(p.UpdatedAt)
+		rawProblems[i] = &problempb.RawProblem{
+			RawProblemId:    uint64(p.RawProblemId),
+			Title:           p.RawProblem.Title,
+			Description:     p.RawProblem.Description,
+			SampleInput:     p.RawProblem.SampleInput,
+			SampleOutput:    p.RawProblem.SampleOutput,
+			Input:           p.RawProblem.Input,
+			Output:          p.RawProblem.Output,
+			Hint:            p.RawProblem.Hint,
+			RemoteOj:        remote_oj.RemoteOjIdToNameMap[p.RawProblem.RemoteOJ],
+			RemoteProblemId: p.RawProblem.RemoteProblemId,
+			RemoteSubmitId:  p.RawProblem.RemoteSubmitId,
+			TimeLimit:       p.RawProblem.TimeLimit,
+			MemoryLimit:     p.RawProblem.MemoryLimit,
+			Spj:             p.RawProblem.Spj,
+			Std:             p.RawProblem.Std,
+			Source:          p.RawProblem.Source,
+			GroupId:         uint64(p.GroupId),
+			UpdatedAt:       updatedAt,
+			ProblemId:       uint64(p.ID),
+		}
+	}
+	return rawProblems
 }

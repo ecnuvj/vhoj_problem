@@ -15,7 +15,7 @@ type ProblemService struct {
 }
 
 func (ProblemService) ListProblems(pageNo int32, pageSize int32) ([]*problempb.Problem, *common.PageInfo, error) {
-	problems, count, err := problem_mapper.ProblemMapper.FindAllProblems(pageNo, pageSize)
+	problems, count, err := problem_mapper.ProblemMapper.FindAllProblems(pageNo, pageSize, false)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -250,4 +250,15 @@ func (ProblemService) RandProblem() (uint, error) {
 		return 0, err
 	}
 	return problem.ID, nil
+}
+
+func (ProblemService) RawProblemList(pageNo int32, pageSize int32) ([]*problempb.RawProblem, *common.PageInfo, error) {
+	problems, count, err := problem_mapper.ProblemMapper.FindAllProblems(pageNo, pageSize, true)
+	if err != nil {
+		return nil, nil, err
+	}
+	return adapter.ModelProblemsToRpcRawProblems(problems), &common.PageInfo{
+		TotalPages: (count + pageSize - 1) / pageSize,
+		TotalCount: count,
+	}, nil
 }

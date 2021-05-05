@@ -396,3 +396,23 @@ func (p *ProblemHandler) RandProblem(ctx context.Context, request *problempb.Ran
 		BaseResponse: util.PbReplyf(base.REPLY_STATUS_SUCCESS, "success"),
 	}, nil
 }
+
+func (p *ProblemHandler) RawProblemList(ctx context.Context, request *problempb.RawProblemListRequest) (*problempb.RawProblemListResponse, error) {
+	if request == nil {
+		return &problempb.RawProblemListResponse{
+			BaseResponse: util.PbReplyf(base.REPLY_STATUS_FAILURE, "request is nil"),
+		}, fmt.Errorf("request is nil")
+	}
+	rawProblems, pageInfo, err := p.ProblemService.RawProblemList(request.PageNo, request.PageSize)
+	if err != nil {
+		return &problempb.RawProblemListResponse{
+			BaseResponse: util.PbReplyf(base.REPLY_STATUS_FAILURE, "service error: %v", err),
+		}, fmt.Errorf("service error: %v", err)
+	}
+	return &problempb.RawProblemListResponse{
+		RawProblems:  rawProblems,
+		TotalPages:   pageInfo.TotalPages,
+		TotalCount:   pageInfo.TotalCount,
+		BaseResponse: util.PbReplyf(base.REPLY_STATUS_SUCCESS, "success"),
+	}, nil
+}

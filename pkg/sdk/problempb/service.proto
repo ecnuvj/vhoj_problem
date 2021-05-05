@@ -8,6 +8,7 @@ import "base/base.proto";
 import "problempb/contest.proto";
 import "problempb/problem.proto";
 import "problempb/contest_problem.proto";
+import "problempb/raw_problem.proto";
 import "include/userpb/user.proto";
 
 service ProblemService {
@@ -31,6 +32,29 @@ service ProblemService {
     rpc GetContestProblems(GetContestProblemsRequest) returns(GetContestProblemsResponse) {};
     rpc GetUserContests(GetUserContestsRequest) returns(GetUserContestsResponse) {};
     rpc RandProblem(RandProblemRequest) returns(RandProblemResponse) {};
+    rpc RawProblemList(RawProblemListRequest) returns(RawProblemListResponse) {};
+    rpc UpdateProblemGroup(UpdateProblemGroupRequest) returns(UpdateProblemGroupResponse) {};
+}
+
+message UpdateProblemGroupRequest {
+    uint64 raw_problem_id = 1;
+    uint64 group_id = 2;
+}
+
+message UpdateProblemGroupResponse {
+    base.BaseResponse base_response = 1;
+}
+
+message RawProblemListRequest {
+    int32 page_no = 1;
+    int32 page_size = 2;
+}
+
+message RawProblemListResponse {
+    repeated RawProblem raw_problems = 1;
+    int32 total_pages = 2;
+    int32 total_count = 3;
+    base.BaseResponse base_response = 4;
 }
 
 message RandProblemRequest {

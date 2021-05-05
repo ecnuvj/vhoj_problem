@@ -1,0 +1,29 @@
+syntax = "proto3";
+
+option go_package = "github.com/ecnuvj/vhoj_problem/pkg/sdk/problempb";
+
+package sdk;
+
+import "include/google/protobuf/timestamp.proto";
+
+message RawProblem  {
+  uint64 raw_problem_id = 1;
+  string title = 2;
+  string description = 3;
+  string sample_input = 4;
+  string sample_output = 5;
+  string input = 6;
+  string output = 7;
+  string hint = 8;
+  string remote_oj = 9;
+  string remote_problem_id = 10;
+  string remote_submit_id = 11;
+  string time_limit = 12;
+  string memory_limit = 13;
+  string spj = 14;
+  string std = 15;
+  string source = 16;
+  uint64 group_id = 17;
+  google.protobuf.Timestamp updated_at = 18;
+  uint64 problem_id = 19;
+}

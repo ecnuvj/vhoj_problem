@@ -37,6 +37,8 @@ type ProblemServiceClient interface {
 	GetContestProblems(ctx context.Context, in *GetContestProblemsRequest, opts ...grpc.CallOption) (*GetContestProblemsResponse, error)
 	GetUserContests(ctx context.Context, in *GetUserContestsRequest, opts ...grpc.CallOption) (*GetUserContestsResponse, error)
 	RandProblem(ctx context.Context, in *RandProblemRequest, opts ...grpc.CallOption) (*RandProblemResponse, error)
+	RawProblemList(ctx context.Context, in *RawProblemListRequest, opts ...grpc.CallOption) (*RawProblemListResponse, error)
+	UpdateProblemGroup(ctx context.Context, in *UpdateProblemGroupRequest, opts ...grpc.CallOption) (*UpdateProblemGroupResponse, error)
 }
 
 type problemServiceClient struct {
@@ -227,6 +229,24 @@ func (c *problemServiceClient) RandProblem(ctx context.Context, in *RandProblemR
 	return out, nil
 }
 
+func (c *problemServiceClient) RawProblemList(ctx context.Context, in *RawProblemListRequest, opts ...grpc.CallOption) (*RawProblemListResponse, error) {
+	out := new(RawProblemListResponse)
+	err := c.cc.Invoke(ctx, "/sdk.ProblemService/RawProblemList", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *problemServiceClient) UpdateProblemGroup(ctx context.Context, in *UpdateProblemGroupRequest, opts ...grpc.CallOption) (*UpdateProblemGroupResponse, error) {
+	out := new(UpdateProblemGroupResponse)
+	err := c.cc.Invoke(ctx, "/sdk.ProblemService/UpdateProblemGroup", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // ProblemServiceServer is the server API for ProblemService service.
 // All implementations must embed UnimplementedProblemServiceServer
 // for forward compatibility
@@ -251,6 +271,8 @@ type ProblemServiceServer interface {
 	GetContestProblems(context.Context, *GetContestProblemsRequest) (*GetContestProblemsResponse, error)
 	GetUserContests(context.Context, *GetUserContestsRequest) (*GetUserContestsResponse, error)
 	RandProblem(context.Context, *RandProblemRequest) (*RandProblemResponse, error)
+	RawProblemList(context.Context, *RawProblemListRequest) (*RawProblemListResponse, error)
+	UpdateProblemGroup(context.Context, *UpdateProblemGroupRequest) (*UpdateProblemGroupResponse, error)
 	mustEmbedUnimplementedProblemServiceServer()
 }
 
@@ -317,6 +339,12 @@ func (UnimplementedProblemServiceServer) GetUserContests(context.Context, *GetUs
 }
 func (UnimplementedProblemServiceServer) RandProblem(context.Context, *RandProblemRequest) (*RandProblemResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method RandProblem not implemented")
+}
+func (UnimplementedProblemServiceServer) RawProblemList(context.Context, *RawProblemListRequest) (*RawProblemListResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method RawProblemList not implemented")
+}
+func (UnimplementedProblemServiceServer) UpdateProblemGroup(context.Context, *UpdateProblemGroupRequest) (*UpdateProblemGroupResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method UpdateProblemGroup not implemented")
 }
 func (UnimplementedProblemServiceServer) mustEmbedUnimplementedProblemServiceServer() {}
 
@@ -691,6 +719,42 @@ func _ProblemService_RandProblem_Handler(srv interface{}, ctx context.Context, d
 	return interceptor(ctx, in, info, handler)
 }
 
+func _ProblemService_RawProblemList_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(RawProblemListRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ProblemServiceServer).RawProblemList(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/sdk.ProblemService/RawProblemList",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ProblemServiceServer).RawProblemList(ctx, req.(*RawProblemListRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _ProblemService_UpdateProblemGroup_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(UpdateProblemGroupRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ProblemServiceServer).UpdateProblemGroup(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/sdk.ProblemService/UpdateProblemGroup",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ProblemServiceServer).UpdateProblemGroup(ctx, req.(*UpdateProblemGroupRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 var _ProblemService_serviceDesc = grpc.ServiceDesc{
 	ServiceName: "sdk.ProblemService",
 	HandlerType: (*ProblemServiceServer)(nil),
@@ -774,6 +838,14 @@ var _ProblemService_serviceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "RandProblem",
 			Handler:    _ProblemService_RandProblem_Handler,
+		},
+		{
+			MethodName: "RawProblemList",
+			Handler:    _ProblemService_RawProblemList_Handler,
+		},
+		{
+			MethodName: "UpdateProblemGroup",
+			Handler:    _ProblemService_UpdateProblemGroup_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
